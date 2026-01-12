@@ -14,14 +14,13 @@ class G2PRegisterLand(G2PRegister):
     # link_foundational_id -> farmer's foundational_id
     # link_internal_record_id -> farmer's internal_record_id
     # master_register_id -> farmer register_id
+    
     location: Mapped[str] = mapped_column(String, nullable=True)
     land_tenure: Mapped[str] = mapped_column(String, nullable=True)
     land_size: Mapped[float] = mapped_column(Float, nullable=True)
-    mobile_number: Mapped[str] = mapped_column(String, nullable=True)
-    registration_date: Mapped[str] = mapped_column(Date, nullable=True)
-    relationship_with_household_head: Mapped[str] = mapped_column(String, nullable=True)
+    measurement: Mapped[str] = mapped_column(String, nullable=True)
 
-    @validates('location', 'land_tenure', 'land_size', 'mobile_number', 'registration_date', 'relationship_with_household_head')
+    @validates('location', 'land_tenure', 'land_size', 'measurement')
     def update_search_text(self, _key: str, value: str) -> str:
         """
         Automatically update search_text whenever any searchable field is modified.
@@ -38,9 +37,7 @@ class G2PRegisterLand(G2PRegister):
             self.location or "",
             self.land_tenure or "",
             self.land_size or "",
-            self.mobile_number or "",
-            self.registration_date or "",
-            self.relationship_with_household_head or ""
+            self.measurement or ""
         ]
         self.search_text = " ".join(searchable_fields).strip()
 
@@ -53,6 +50,4 @@ class G2PRegisterHistoryLand(G2PRegisterHistory):
     location: Mapped[str] = mapped_column(String, nullable=True)
     land_tenure: Mapped[str] = mapped_column(String, nullable=True)
     land_size: Mapped[float] = mapped_column(Float, nullable=True)
-    mobile_number: Mapped[str] = mapped_column(String, nullable=True)
-    registration_date: Mapped[str] = mapped_column(Date, nullable=True)
-    relationship_with_household_head: Mapped[str] = mapped_column(String, nullable=True)
+    measurement: Mapped[str] = mapped_column(String, nullable=True)
