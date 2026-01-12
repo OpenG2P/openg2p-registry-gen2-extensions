@@ -10,16 +10,13 @@ from openg2p_fastapi_common.app import Initializer as BaseInitializer
 from openg2p_registry_core.app import Initializer as CoreInitializer
 
 from .register_domain.models import (
-    G2PRegisterFarmer,
-    G2PRegisterHistoryFarmer,
-    G2PRegisterFamily,
-    G2PRegisterHistoryFamily,
-    G2PRegisterFamilyMember,
-    G2PRegisterHistoryFamilyMember,
-    G2PRegisterHousehold,
-    G2PRegisterHistoryHousehold,
-    G2PRegisterAsset,
-    G2PRegisterHistoryAsset,
+    G2PRegisterFarmer, G2PRegisterHistoryFarmer,
+    G2PRegisterHousehold, G2PRegisterHistoryHousehold,
+    G2PRegisterHouseholdMember, G2PRegisterHistoryHouseholdMember,
+    G2PRegisterCrop, G2PRegisterHistoryCrop,
+    G2PRegisterLand, G2PRegisterHistoryLand,
+    G2PRegisterLivestock, G2PRegisterHistoryLivestock,
+    G2PRegisterMachinery, G2PRegisterHistoryMachinery,
 )
 from .register_domain.factory import G2PRegisterDomainFactory
 from .register_domain.services import G2PRegisterFarmerDomainService
@@ -42,16 +39,22 @@ class Initializer(BaseInitializer):
             await G2PRegisterFarmer.create_migrate()
             await G2PRegisterHistoryFarmer.create_migrate()
 
-            await G2PRegisterFamily.create_migrate()
-            await G2PRegisterHistoryFamily.create_migrate()
-
-            await G2PRegisterFamilyMember.create_migrate()
-            await G2PRegisterHistoryFamilyMember.create_migrate()
-
             await G2PRegisterHousehold.create_migrate()
             await G2PRegisterHistoryHousehold.create_migrate()
 
-            await G2PRegisterAsset.create_migrate()
-            await G2PRegisterHistoryAsset.create_migrate()
+            await G2PRegisterHouseholdMember.create_migrate()
+            await G2PRegisterHistoryHouseholdMember.create_migrate()
+
+            await G2PRegisterCrop.create_migrate()
+            await G2PRegisterHistoryCrop.create_migrate()
+
+            await G2PRegisterLand.create_migrate()
+            await G2PRegisterHistoryLand.create_migrate()
+
+            await G2PRegisterLivestock.create_migrate()
+            await G2PRegisterHistoryLivestock.create_migrate()
+
+            await G2PRegisterMachinery.create_migrate()
+            await G2PRegisterHistoryMachinery.create_migrate()
 
         asyncio.run(migrate())
