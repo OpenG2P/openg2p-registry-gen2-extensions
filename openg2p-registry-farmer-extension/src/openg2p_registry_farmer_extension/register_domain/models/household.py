@@ -14,13 +14,17 @@ class G2PRegisterHousehold(G2PRegister):
     # link_foundational_id -> NONE
     # link_internal_record_id -> NONE
     # master_register_id -> NONE
+
+    # DCI fields
+    identifier_type: Mapped[str] = mapped_column(String, nullable=True)
+    identifier_value: Mapped[str] = mapped_column(String, nullable=True)
+
     address: Mapped[str] = mapped_column(String, nullable=True)
     district: Mapped[str] = mapped_column(String, nullable=True)
     region: Mapped[str] = mapped_column(String, nullable=True)
     poverty_score: Mapped[float] = mapped_column(Float, nullable=True)
     poverty_score_type: Mapped[str] = mapped_column(String, nullable=True)
     household_head: Mapped[str] = mapped_column(String, nullable=True)
-    no_of_members: Mapped[int] = mapped_column(Integer, nullable=True)
 
     @validates('address', 'district', 'region', 'poverty_score', 'poverty_score_type', 'household_head', 'no_of_members')
     def update_search_text(self, _key: str, value: str) -> str:
@@ -52,6 +56,9 @@ class G2PRegisterHistoryHousehold(G2PRegisterHistory):
     __tablename__ = "g2p_register_history_households"
 
     # Override all columns from base to make them nullable for history
+    identifier_type: Mapped[str] = mapped_column(String, nullable=True)
+    identifier_value: Mapped[str] = mapped_column(String, nullable=True)
+    
     address: Mapped[str] = mapped_column(String, nullable=True)
     district: Mapped[str] = mapped_column(String, nullable=True)
     region: Mapped[str] = mapped_column(String, nullable=True)
