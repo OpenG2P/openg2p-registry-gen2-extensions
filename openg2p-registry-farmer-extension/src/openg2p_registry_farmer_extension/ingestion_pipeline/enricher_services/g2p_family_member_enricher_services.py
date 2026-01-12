@@ -13,7 +13,7 @@ class G2PDciFamilyMemberCreateEnricherService(G2PPayloadEnricherInterface):
     def enrich(self, data: Dict, session: Session) -> Dict:
         _logger.info("Processing G2PDciFamilyMemberCreateEnricherService")
 
-        parent_link_record_id = None
+        parent_link_internal_record_id = None
 
         # Try to find a parent family member using parent1_identifier
         parent1_identifier_data = data.get('parent1_identifier')
@@ -26,11 +26,11 @@ class G2PDciFamilyMemberCreateEnricherService(G2PPayloadEnricherInterface):
                 ).scalar_one_or_none()
 
                 if parent_family_member:
-                    parent_link_record_id = parent_family_member.link_record_id
-                    _logger.info(f"Found parent family member via parent1_identifier. Link record ID: {parent_link_record_id}")
+                    parent_link_internal_record_id = parent_family_member.link_internal_record_id
+                    _logger.info(f"Found parent family member via parent1_identifier. Link record ID: {parent_link_internal_record_id}")
 
         # If parent1_identifier didn't yield a result, try parent2_identifier
-        if parent_link_record_id is None:
+        if parent_link_internal_record_id is None:
             parent2_identifier_data = data.get('parent2_identifier')
             if isinstance(parent2_identifier_data, dict):
                 identifier_value = parent2_identifier_data.get('identifier_value')
@@ -41,14 +41,14 @@ class G2PDciFamilyMemberCreateEnricherService(G2PPayloadEnricherInterface):
                     ).scalar_one_or_none()
 
                     if parent_family_member:
-                        parent_link_record_id = parent_family_member.link_record_id
-                        _logger.info(f"Found parent family member via parent2_identifier. Link record ID: {parent_link_record_id}")
+                        parent_link_internal_record_id = parent_family_member.link_internal_record_id
+                        _logger.info(f"Found parent family member via parent2_identifier. Link record ID: {parent_link_internal_record_id}")
 
-        if parent_link_record_id:
-            data['link_record_id'] = parent_link_record_id
+        if parent_link_internal_record_id:
+            data['link_internal_record_id'] = parent_link_internal_record_id
         else:
             _logger.warning("Could not find a parent family member using either parent1_identifier or parent2_identifier.")
-            data["link_record_id"] = None
+            data["link_internal_record_id"] = None
         
         return data
 
