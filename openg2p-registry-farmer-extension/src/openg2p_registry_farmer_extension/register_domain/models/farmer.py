@@ -12,9 +12,8 @@ class G2PRegisterFarmer(G2PRegister):
     # functional_record_id -> farmer_id
     # foundational_id -> national_id
     # link_foundational_id -> NONE
-    # link_foundational_register_id -> NONE
     # link_internal_record_id -> household's internal_record_id
-    # link_internal_register_id -> household register_id
+    # master_register_id -> household register_id
     name: Mapped[str] = mapped_column(String, nullable=False)
     date_of_birth: Mapped[str] = mapped_column(Date, nullable=False)
     gender: Mapped[str] = mapped_column(String, nullable=True)

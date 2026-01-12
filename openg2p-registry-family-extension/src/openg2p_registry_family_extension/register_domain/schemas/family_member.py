@@ -64,13 +64,6 @@ class G2PRegisterSchemaFamilyMember(G2PRegisterSchema):
     role_in_household: Optional[str] = None
     relationship_with_household_head: Optional[str] = None
 
-    type_of_housing: Optional[str] = None
-    house_condition: Optional[str] = None
-    sanitation_condition: Optional[str] = None
-    water_access: Optional[str] = None
-    electricity_access: Optional[str] = None
-    benefits_received_by_household: Optional[str] = None
-
     sources_of_income: Optional[str] = None
     annual_income: Optional[str] = None
     owns_a_two_wheeler: Optional[bool] = None
@@ -146,13 +139,6 @@ class G2PRegisterHistorySchemaFamilyMember(G2PRegisterHistorySchema):
     employment_status: Optional[str] = None
     role_in_household: Optional[str] = None
     relationship_with_household_head: Optional[str] = None
-
-    type_of_housing: Optional[str] = None
-    house_condition: Optional[str] = None
-    sanitation_condition: Optional[str] = None
-    water_access: Optional[str] = None
-    electricity_access: Optional[str] = None
-    benefits_received_by_household: Optional[str] = None
 
     sources_of_income: Optional[str] = None
     annual_income: Optional[str] = None

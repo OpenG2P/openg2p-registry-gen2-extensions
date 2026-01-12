@@ -14,10 +14,10 @@ class G2PRegisterFamilyMember(G2PRegister):
     # functional_record_id -> NONE
     # foundational_id -> national_id
     # link_foundational_id -> NONE
-    # link_foundational_register_id -> NONE
     # link_internal_record_id -> family's internal_record_id
-    # link_internal_register_id -> family register_id
+    # master_register_id -> family register_id
 
+    # DCI fields
     # Identifiers
     identifier_type: Mapped[str] = mapped_column(String, nullable=True)
     identifier_value: Mapped[str] = mapped_column(String, nullable=True)
@@ -74,13 +74,6 @@ class G2PRegisterFamilyMember(G2PRegister):
     employment_status: Mapped[str] = mapped_column(String, nullable=True)
     role_in_household: Mapped[str] = mapped_column(String, nullable=True)
     relationship_with_household_head: Mapped[str] = mapped_column(String, nullable=True)
-
-    type_of_housing: Mapped[str] = mapped_column(String, nullable=True)
-    house_condition: Mapped[str] = mapped_column(String, nullable=True)
-    sanitation_condition: Mapped[str] = mapped_column(String, nullable=True)
-    water_access: Mapped[str] = mapped_column(String, nullable=True)
-    electricity_access: Mapped[str] = mapped_column(String, nullable=True)
-    benefits_received_by_household: Mapped[str] = mapped_column(String, nullable=True)
 
     sources_of_income: Mapped[str] = mapped_column(String, nullable=True)
     annual_income: Mapped[str] = mapped_column(String, nullable=True)
@@ -152,12 +145,6 @@ class G2PRegisterFamilyMember(G2PRegister):
             self.employment_status or "",
             self.role_in_household or "",
             self.relationship_with_household_head or "",
-            self.type_of_housing or "",
-            self.house_condition or "",
-            self.sanitation_condition or "",
-            self.water_access or "",
-            self.electricity_access or "",
-            self.benefits_received_by_household or "",
             self.sources_of_income or "",
             self.annual_income or "",
             self.owns_a_two_wheeler or "",
@@ -218,12 +205,6 @@ class G2PRegisterHistoryFamilyMember(G2PRegisterHistory):
     employment_status: Mapped[str] = mapped_column(String, nullable=True)
     role_in_household: Mapped[str] = mapped_column(String, nullable=True)
     relationship_with_household_head: Mapped[str] = mapped_column(String, nullable=True)
-    type_of_housing: Mapped[str] = mapped_column(String, nullable=True)
-    house_condition: Mapped[str] = mapped_column(String, nullable=True)
-    sanitation_condition: Mapped[str] = mapped_column(String, nullable=True)
-    water_access: Mapped[str] = mapped_column(String, nullable=True)
-    electricity_access: Mapped[str] = mapped_column(String, nullable=True)
-    benefits_received_by_household: Mapped[str] = mapped_column(String, nullable=True)
     sources_of_income: Mapped[str] = mapped_column(String, nullable=True)
     annual_income: Mapped[str] = mapped_column(String, nullable=True)
     owns_a_two_wheeler: Mapped[str] = mapped_column(String, nullable=True)

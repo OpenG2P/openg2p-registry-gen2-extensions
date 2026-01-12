@@ -12,9 +12,8 @@ class G2PRegisterHousehold(G2PRegister):
     # functional_record_id -> household_id
     # foundational_id -> NONE
     # link_foundational_id -> NONE
-    # link_foundational_register_id -> NONE
     # link_internal_record_id -> NONE
-    # link_internal_register_id -> NONE
+    # master_register_id -> NONE
     address: Mapped[str] = mapped_column(String, nullable=True)
     district: Mapped[str] = mapped_column(String, nullable=True)
     region: Mapped[str] = mapped_column(String, nullable=True)
