@@ -12,10 +12,10 @@ class G2PRegisterCrop(G2PRegister):
     # internal_record_id
     # functional_record_id -> NONE
     # foundational_id -> NONE
-    # link_foundational_id -> farmer's foundational_id
-    # link_foundational_register_id -> farmer register_id
-    # link_internal_record_id -> farmer's internal_record_id
-    # link_internal_register_id -> farmer register_id
+    # link_foundational_id -> NONE
+    # link_internal_record_id -> land's internal_record_id
+    # master_register_id -> land register_id
+
     activity_group: Mapped[str] = mapped_column(String, nullable=True)
     crop_type: Mapped[str] = mapped_column(String, nullable=True)
     variety: Mapped[str] = mapped_column(String, nullable=True)

@@ -13,14 +13,21 @@ class G2PRegisterFamily(G2PRegister):
     # functional_record_id -> family_id
     # foundational_id -> NONE
     # link_foundational_id -> NONE
-    # link_foundational_register_id -> NONE
     # link_internal_record_id -> NONE
-    # link_internal_register_id -> NONE
+    # master_register_id -> NONE
+    family_name: Mapped[str] = mapped_column(String, nullable=True)
+
+    type_of_housing: Mapped[str] = mapped_column(String, nullable=True)
+    house_condition: Mapped[str] = mapped_column(String, nullable=True)
+    sanitation_condition: Mapped[str] = mapped_column(String, nullable=True)
+    water_access: Mapped[str] = mapped_column(String, nullable=True)
+    electricity_access: Mapped[str] = mapped_column(String, nullable=True)
+
     ethnic_group: Mapped[str] = mapped_column(String, nullable=True)
     belong_to_protected_groups: Mapped[bool] = mapped_column(Boolean, nullable=True)
     under_other_vulnerable_status: Mapped[bool] = mapped_column(Boolean, nullable=True)
 
-    @validates('ethnic_group', 'belong_to_protected_groups', 'under_other_vulnerable_status')
+    @validates('family_name', 'type_of_housing', 'house_condition', 'sanitation_condition', 'water_access', 'electricity_access', 'ethnic_group', 'belong_to_protected_groups', 'under_other_vulnerable_status')
     def update_search_text(self, _key: str, value: str) -> str:
         """
         Automatically update search_text whenever any searchable field is modified.
@@ -34,6 +41,12 @@ class G2PRegisterFamily(G2PRegister):
         Populate search_text by combining all searchable family fields.
         """
         searchable_fields: list[str] = [
+            self.family_name or "",
+            self.type_of_housing or "",
+            self.house_condition or "",
+            self.sanitation_condition or "",
+            self.water_access or "",
+            self.electricity_access or "",
             self.ethnic_group or "",
             self.belong_to_protected_groups or "",
             self.under_other_vulnerable_status or ""
@@ -45,6 +58,12 @@ class G2PRegisterHistoryFamily(G2PRegisterHistory):
     __tablename__ = "g2p_register_history_families"
 
     # Override all columns from G2PRegisterFamilyBase to make them nullable for history
+    family_name: Mapped[str] = mapped_column(String, nullable=True)
+    type_of_housing: Mapped[str] = mapped_column(String, nullable=True)
+    house_condition: Mapped[str] = mapped_column(String, nullable=True)
+    sanitation_condition: Mapped[str] = mapped_column(String, nullable=True)
+    water_access: Mapped[str] = mapped_column(String, nullable=True)
+    electricity_access: Mapped[str] = mapped_column(String, nullable=True)
     ethnic_group: Mapped[str] = mapped_column(String, nullable=True)
     belong_to_protected_groups: Mapped[bool] = mapped_column(Boolean, nullable=True)
     under_other_vulnerable_status: Mapped[bool] = mapped_column(Boolean, nullable=True)
