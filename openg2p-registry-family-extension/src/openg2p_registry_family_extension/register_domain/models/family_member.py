@@ -6,9 +6,17 @@ from openg2p_fastapi_common.models import BaseORMModel
 from datetime import datetime, date
 
 
-class G2PRegisterFamilyMemberBase(BaseORMModel):
-    
-    __abstract__ = True
+# All Register classes should have the prefix G2PRegister
+class G2PRegisterFamilyMember(G2PRegister):
+    __tablename__ = "g2p_register_family_members"
+
+    # internal_record_id
+    # functional_record_id -> NONE
+    # foundational_id -> national_id
+    # link_foundational_id -> NONE
+    # link_foundational_register_id -> NONE
+    # link_internal_record_id -> family's internal_record_id
+    # link_internal_register_id -> family register_id
 
     # Identifiers
     identifier_type: Mapped[str] = mapped_column(String, nullable=True)
@@ -61,11 +69,35 @@ class G2PRegisterFamilyMemberBase(BaseORMModel):
     parent1_identifier_value: Mapped[str] = mapped_column(String, nullable=True)
     parent2_identifier_value: Mapped[str] = mapped_column(String, nullable=True)
 
+    # Social Registry Commons
+    education_level: Mapped[str] = mapped_column(String, nullable=True)
+    employment_status: Mapped[str] = mapped_column(String, nullable=True)
+    role_in_household: Mapped[str] = mapped_column(String, nullable=True)
+    relationship_with_household_head: Mapped[str] = mapped_column(String, nullable=True)
 
+    type_of_housing: Mapped[str] = mapped_column(String, nullable=True)
+    house_condition: Mapped[str] = mapped_column(String, nullable=True)
+    sanitation_condition: Mapped[str] = mapped_column(String, nullable=True)
+    water_access: Mapped[str] = mapped_column(String, nullable=True)
+    electricity_access: Mapped[str] = mapped_column(String, nullable=True)
+    benefits_received_by_household: Mapped[str] = mapped_column(String, nullable=True)
 
-# All Register classes should have the prefix G2PRegister
-class G2PRegisterFamilyMember(G2PRegisterFamilyMemberBase, G2PRegister):
-    __tablename__ = "g2p_register_family_members"
+    sources_of_income: Mapped[str] = mapped_column(String, nullable=True)
+    annual_income: Mapped[str] = mapped_column(String, nullable=True)
+    owns_a_two_wheeler: Mapped[bool] = mapped_column(Boolean, nullable=True)
+    owns_a_three_wheeler: Mapped[bool] = mapped_column(Boolean, nullable=True)
+    owns_a_four_wheeler: Mapped[bool] = mapped_column(Boolean, nullable=True)
+    owns_a_cart: Mapped[bool] = mapped_column(Boolean, nullable=True)
+    land_ownership: Mapped[bool] = mapped_column(Boolean, nullable=True)
+    type_of_land_owned: Mapped[str] = mapped_column(String, nullable=True)
+    land_size: Mapped[str] = mapped_column(String, nullable=True)
+    owns_house: Mapped[bool] = mapped_column(Boolean, nullable=True)
+    owns_livestock: Mapped[bool] = mapped_column(Boolean, nullable=True)
+
+    is_head: Mapped[bool] = mapped_column(Boolean, nullable=True)
+    is_disabled: Mapped[bool] = mapped_column(Boolean, nullable=True)
+    is_pregnant_and_lactating: Mapped[bool] = mapped_column(Boolean, nullable=True)
+    is_malnourished_child: Mapped[bool] = mapped_column(Boolean, nullable=True)
 
     @validates('identifier_type', 'identifier_value', 'surname', 'given_name', 'second_name', 'prefix', 'suffix', 'phone_numbers', 'emails', 'sex', 'birth_date', 'birth_place_name', 'birth_place_lat', 'birth_place_lng', 'death_date', 'death_place', 'address_line1', 'address_line2', 'locality', 'sub_region_code', 'region_code', 'postal_code', 'country_code', 'plus_code', 'geo_lat', 'geo_lng', 'marital_status', 'marriage_date', 'divorce_date', 'parent1_identifier_value', 'parent2_identifier_value')
     def update_search_text(self, _key: str, value: str) -> str:
@@ -114,11 +146,38 @@ class G2PRegisterFamilyMember(G2PRegisterFamilyMemberBase, G2PRegister):
             str(self.birth_place_lng) if self.birth_place_lng is not None else "",
             str(self.geo_lat) if self.geo_lat is not None else "",
             str(self.geo_lng) if self.geo_lng is not None else "",
+
+            # Social Registry Commons
+            self.education_level or "",
+            self.employment_status or "",
+            self.role_in_household or "",
+            self.relationship_with_household_head or "",
+            self.type_of_housing or "",
+            self.house_condition or "",
+            self.sanitation_condition or "",
+            self.water_access or "",
+            self.electricity_access or "",
+            self.benefits_received_by_household or "",
+            self.sources_of_income or "",
+            self.annual_income or "",
+            self.owns_a_two_wheeler or "",
+            self.owns_a_three_wheeler or "",
+            self.owns_a_four_wheeler or "",
+            self.owns_a_cart or "",
+            self.land_ownership or "",
+            self.type_of_land_owned or "",
+            self.land_size or "",
+            self.owns_house or "",
+            self.owns_livestock or "",
+            self.is_head or "",
+            self.is_disabled or "",
+            self.is_pregnant_and_lactating or "",
+            self.is_malnourished_child or "",
         ]
         self.search_text = " ".join(searchable_fields).strip()
 
 # All Register History classes should have the prefix G2PRegisterHistory
-class G2PRegisterHistoryFamilyMember(G2PRegisterFamilyMemberBase, G2PRegisterHistory):
+class G2PRegisterHistoryFamilyMember(G2PRegisterHistory):
     __tablename__ = "g2p_register_history_family_members"
 
     # Override all columns from G2PRegisterFamilyMemberBase to make them nullable for history
@@ -153,3 +212,30 @@ class G2PRegisterHistoryFamilyMember(G2PRegisterFamilyMemberBase, G2PRegisterHis
     divorce_date: Mapped[str] = mapped_column(String, nullable=True)
     parent1_identifier_value: Mapped[str] = mapped_column(String, nullable=True)
     parent2_identifier_value: Mapped[str] = mapped_column(String, nullable=True)
+
+    # Social Registry Commons
+    education_level: Mapped[str] = mapped_column(String, nullable=True)
+    employment_status: Mapped[str] = mapped_column(String, nullable=True)
+    role_in_household: Mapped[str] = mapped_column(String, nullable=True)
+    relationship_with_household_head: Mapped[str] = mapped_column(String, nullable=True)
+    type_of_housing: Mapped[str] = mapped_column(String, nullable=True)
+    house_condition: Mapped[str] = mapped_column(String, nullable=True)
+    sanitation_condition: Mapped[str] = mapped_column(String, nullable=True)
+    water_access: Mapped[str] = mapped_column(String, nullable=True)
+    electricity_access: Mapped[str] = mapped_column(String, nullable=True)
+    benefits_received_by_household: Mapped[str] = mapped_column(String, nullable=True)
+    sources_of_income: Mapped[str] = mapped_column(String, nullable=True)
+    annual_income: Mapped[str] = mapped_column(String, nullable=True)
+    owns_a_two_wheeler: Mapped[str] = mapped_column(String, nullable=True)
+    owns_a_three_wheeler: Mapped[str] = mapped_column(String, nullable=True)
+    owns_a_four_wheeler: Mapped[str] = mapped_column(String, nullable=True)
+    owns_a_cart: Mapped[str] = mapped_column(String, nullable=True)
+    land_ownership: Mapped[str] = mapped_column(String, nullable=True)
+    type_of_land_owned: Mapped[str] = mapped_column(String, nullable=True)
+    land_size: Mapped[str] = mapped_column(String, nullable=True)
+    owns_house: Mapped[str] = mapped_column(String, nullable=True)
+    owns_livestock: Mapped[str] = mapped_column(String, nullable=True)
+    is_head: Mapped[str] = mapped_column(String, nullable=True)
+    is_disabled: Mapped[str] = mapped_column(String, nullable=True)
+    is_pregnant_and_lactating: Mapped[str] = mapped_column(String, nullable=True)
+    is_malnourished_child: Mapped[str] = mapped_column(String, nullable=True)
