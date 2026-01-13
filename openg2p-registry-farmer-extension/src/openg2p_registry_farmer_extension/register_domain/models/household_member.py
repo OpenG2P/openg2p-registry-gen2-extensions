@@ -55,7 +55,7 @@ class G2PRegisterHouseholdMember(G2PRegister):
             self.given_name or "",
             self.prefix or "",
             self.suffix or "",
-            self.date_of_birth or "",
+            str(self.date_of_birth) if self.date_of_birth else "",
             self.gender or "",
             self.mobile_number or "",
             self.email or "",
@@ -63,7 +63,7 @@ class G2PRegisterHouseholdMember(G2PRegister):
             self.occupation or "",
             self.income_level or "",
             self.education_level or "",
-            self.is_disabled or ""
+            str(self.is_disabled) if self.is_disabled is not None else ""
         ]
         self.search_text = " ".join(searchable_fields).strip()
 

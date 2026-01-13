@@ -48,7 +48,7 @@ class G2PRegisterFarmer(G2PRegister):
             self.identifier_value or "",
             self.first_name or "",
             self.last_name or "",
-            self.date_of_birth or "",
+            str(self.date_of_birth) if self.date_of_birth else "",
             self.gender or "",
             self.address or "",
             self.district or "",
@@ -56,7 +56,7 @@ class G2PRegisterFarmer(G2PRegister):
             self.mobile_number or "",
             self.email or "",
             self.marital_status or "",
-            self.is_disabled or ""
+            str(self.is_disabled) if self.is_disabled is not None else ""
         ]
         self.search_text = " ".join(searchable_fields).strip()
 

@@ -36,7 +36,7 @@ class G2PRegisterLand(G2PRegister):
         searchable_fields: list[str] = [
             self.location or "",
             self.land_tenure or "",
-            self.land_size or "",
+            str(self.land_size) if self.land_size is not None else "",
             self.measurement or ""
         ]
         self.search_text = " ".join(searchable_fields).strip()
