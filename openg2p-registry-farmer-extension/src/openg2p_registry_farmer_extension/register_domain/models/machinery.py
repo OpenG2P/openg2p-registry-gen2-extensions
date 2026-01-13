@@ -33,7 +33,7 @@ class G2PRegisterMachinery(G2PRegister):
         """
         searchable_fields: list[str] = [
             self.machinery_type or "",
-            self.count or "",
+            str(self.count) if self.count is not None else "",
             self.equipment_source or ""
         ]
         self.search_text = " ".join(searchable_fields).strip()

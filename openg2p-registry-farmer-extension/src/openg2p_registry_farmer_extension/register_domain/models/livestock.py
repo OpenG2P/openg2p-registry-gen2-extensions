@@ -33,7 +33,7 @@ class G2PRegisterLivestock(G2PRegister):
         """
         searchable_fields: list[str] = [
             self.livestock_type or "",
-            self.count or "",
+            str(self.count) if self.count is not None else "",
             self.livestock_system or ""
         ]
         self.search_text = " ".join(searchable_fields).strip()
