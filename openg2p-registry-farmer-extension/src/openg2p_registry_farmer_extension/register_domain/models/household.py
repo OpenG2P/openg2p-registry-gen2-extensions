@@ -1,5 +1,5 @@
-from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column, validates, Integer, Float
+from sqlalchemy import String, Integer, Float
+from sqlalchemy.orm import Mapped, mapped_column, validates
 from openg2p_registry_core.models import G2PRegister, G2PRegisterHistory
 from openg2p_fastapi_common.models import BaseORMModel
 
