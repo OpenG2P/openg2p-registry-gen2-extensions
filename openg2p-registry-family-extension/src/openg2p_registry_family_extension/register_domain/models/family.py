@@ -48,8 +48,8 @@ class G2PRegisterFamily(G2PRegister):
             self.water_access or "",
             self.electricity_access or "",
             self.ethnic_group or "",
-            self.belong_to_protected_groups or "",
-            self.under_other_vulnerable_status or ""
+            str(self.belong_to_protected_groups) if self.belong_to_protected_groups is not None else "",
+            str(self.under_other_vulnerable_status) if self.under_other_vulnerable_status is not None else ""
         ]
         self.search_text = " ".join(searchable_fields).strip()
 
