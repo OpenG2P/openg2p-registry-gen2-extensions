@@ -1,5 +1,5 @@
-from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column, validates, Integer, Float
+from sqlalchemy import String, Integer, Float
+from sqlalchemy.orm import Mapped, mapped_column, validates
 from openg2p_registry_core.models import G2PRegister, G2PRegisterHistory
 from openg2p_fastapi_common.models import BaseORMModel
 
@@ -26,7 +26,7 @@ class G2PRegisterHousehold(G2PRegister):
     poverty_score_type: Mapped[str] = mapped_column(String, nullable=True)
     household_head: Mapped[str] = mapped_column(String, nullable=True)
 
-    @validates('address', 'district', 'region', 'poverty_score', 'poverty_score_type', 'household_head', 'no_of_members')
+    @validates('address', 'district', 'region', 'poverty_score', 'poverty_score_type', 'household_head')
     def update_search_text(self, _key: str, value: str) -> str:
         """
         Automatically update search_text whenever any searchable field is modified.
@@ -43,10 +43,9 @@ class G2PRegisterHousehold(G2PRegister):
             self.address or "",
             self.district or "",
             self.region or "",
-            self.poverty_score or "",
+            str(self.poverty_score) if self.poverty_score is not None else "",
             self.poverty_score_type or "",
-            self.household_head or "",
-            self.no_of_members or ""
+            self.household_head or ""
         ]
         self.search_text = " ".join(searchable_fields).strip()
 
@@ -58,12 +57,11 @@ class G2PRegisterHistoryHousehold(G2PRegisterHistory):
     # Override all columns from base to make them nullable for history
     identifier_type: Mapped[str] = mapped_column(String, nullable=True)
     identifier_value: Mapped[str] = mapped_column(String, nullable=True)
-    
+
     address: Mapped[str] = mapped_column(String, nullable=True)
     district: Mapped[str] = mapped_column(String, nullable=True)
     region: Mapped[str] = mapped_column(String, nullable=True)
     poverty_score: Mapped[float] = mapped_column(Float, nullable=True)
     poverty_score_type: Mapped[str] = mapped_column(String, nullable=True)
     household_head: Mapped[str] = mapped_column(String, nullable=True)
-    no_of_members: Mapped[int] = mapped_column(Integer, nullable=True)
 
