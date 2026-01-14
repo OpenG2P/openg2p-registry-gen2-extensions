@@ -19,8 +19,8 @@ class G2PRegisterFamilyMember(G2PRegister):
 
     # DCI fields
     # Identifiers
-    identifier_type: Mapped[str] = mapped_column(String, nullable=True)
-    identifier_value: Mapped[str] = mapped_column(String, nullable=True)
+    # identifier_type: Mapped[str] = mapped_column(String, nullable=True)
+    # identifier_value: Mapped[str] = mapped_column(String, nullable=True)
 
     # Name fields
     surname: Mapped[str] = mapped_column(String, nullable=True)
@@ -66,8 +66,8 @@ class G2PRegisterFamilyMember(G2PRegister):
     divorce_date: Mapped[str] = mapped_column(String, nullable=True)
 
     # Parents
-    parent1_identifier_value: Mapped[str] = mapped_column(String, nullable=True)
-    parent2_identifier_value: Mapped[str] = mapped_column(String, nullable=True)
+    # parent1_identifier_value: Mapped[str] = mapped_column(String, nullable=True)
+    # parent2_identifier_value: Mapped[str] = mapped_column(String, nullable=True)
 
     # Social Registry Commons
     education_level: Mapped[str] = mapped_column(String, nullable=True)

@@ -45,7 +45,7 @@ class G2PDciFamilyMemberCreateEnricherService(G2PPayloadEnricherInterface):
 
             parent_family_member = session.execute(
                 select(G2PRegisterFamilyMember).filter_by(
-                    identifier_value=identifier_value
+                    foundational_id=identifier_value
                 )
             ).scalar_one_or_none()
 
