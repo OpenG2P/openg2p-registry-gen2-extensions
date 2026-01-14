@@ -7,49 +7,49 @@ from sqlalchemy.orm import Session
 _logger = logging.getLogger('g2p-payload-enricher-service')
 
 # DCI Payload Enrichers
-class G2PDciFarmerCreateEnricherService(G2PPayloadEnricherInterface):
+class G2PDciFamilyCreateEnricherService(G2PPayloadEnricherInterface):
     def enrich(self, data: Dict, session: Session) -> Dict:
-        _logger.info("Processing G2PDciFarmerCreateEnricherService")
+        _logger.info("Processing G2PDciFamilyCreateEnricherService")
         return data
 
-class G2PDciFarmerUpdateEnricherService(G2PPayloadEnricherInterface):
+class G2PDciFamilyUpdateEnricherService(G2PPayloadEnricherInterface):
     def enrich(self, data: Dict, session: Session) -> Dict:
-        _logger.info("Processing G2PDciFarmerUpdateEnricherService")
+        _logger.info("Processing G2PDciFamilyUpdateEnricherService")
         return data
 
-class G2PDciFarmerDeleteEnricherService(G2PPayloadEnricherInterface):
+class G2PDciFamilyDeleteEnricherService(G2PPayloadEnricherInterface):
     def enrich(self, data: Dict, session: Session) -> Dict:
-        _logger.info("Processing G2PDciFarmerDeleteEnricherService")
+        _logger.info("Processing G2PDciFamilyDeleteEnricherService")
         return data
 
 # SPDCI Payload Enrichers
-class G2PSpdciFarmerCreateEnricherService(G2PPayloadEnricherInterface):
+class G2PSpdciFamilyCreateEnricherService(G2PPayloadEnricherInterface):
     def enrich(self, data: Dict, session: Session) -> Dict:
-        _logger.info("Processing G2PSpdciFarmerCreateEnricherService")
+        _logger.info("Processing G2PSpdciFamilyCreateEnricherService")
         return data
 
-class G2PSpdciFarmerUpdateEnricherService(G2PPayloadEnricherInterface):
+class G2PSpdciFamilyUpdateEnricherService(G2PPayloadEnricherInterface):
     def enrich(self, data: Dict, session: Session) -> Dict:
-        _logger.info("Processing G2PSpdciFarmerUpdateEnricherService")
+        _logger.info("Processing G2PSpdciFamilyUpdateEnricherService")
         return data
 
-class G2PSpdciFarmerDeleteEnricherService(G2PPayloadEnricherInterface):
+class G2PSpdciFamilyDeleteEnricherService(G2PPayloadEnricherInterface):
     def enrich(self, data: Dict, session: Session) -> Dict:
-        _logger.info("Processing G2PSpdciFarmerDeleteEnricherService")
+        _logger.info("Processing G2PSpdciFamilyDeleteEnricherService")
         return data
 
 # UNDP Payload Enrichers
-class G2PUndpFarmerCreateEnricherService(G2PPayloadEnricherInterface):
+class G2PUndpFamilyCreateEnricherService(G2PPayloadEnricherInterface):
     def enrich(self, data: Dict, session: Session) -> Dict:
-        _logger.info("Processing G2PUndpFarmerCreateEnricherService")
+        _logger.info("Processing G2PUndpFamilyCreateEnricherService")
         return data
 
-class G2PUndpFarmerUpdateEnricherService(G2PPayloadEnricherInterface):
+class G2PUndpFamilyUpdateEnricherService(G2PPayloadEnricherInterface):
     def enrich(self, data: Dict, session: Session) -> Dict:
-        _logger.info("Processing G2PUndpFarmerUpdateEnricherService")
+        _logger.info("Processing G2PUndpFamilyUpdateEnricherService")
         return data
 
-class G2PUndpFarmerDeleteEnricherService(G2PPayloadEnricherInterface):
+class G2PUndpFamilyDeleteEnricherService(G2PPayloadEnricherInterface):
     def enrich(self, data: Dict, session: Session) -> Dict:
-        _logger.info("Processing G2PUndpFarmerDeleteEnricherService")
+        _logger.info("Processing G2PUndpFamilyDeleteEnricherService")
         return data
