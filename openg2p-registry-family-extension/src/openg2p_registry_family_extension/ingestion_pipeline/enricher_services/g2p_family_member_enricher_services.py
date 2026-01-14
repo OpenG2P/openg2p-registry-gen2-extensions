@@ -30,17 +30,19 @@ class G2PDciFamilyMemberCreateEnricherService(G2PPayloadEnricherInterface):
                 or identifier_block.get("spdci:member_identifier")
                 or identifier_block.get("identifier_value")
             )
+        
+        related_persons = data.get('related_person')
 
         # Parent lookup (ORDER: parent1 → parent2)
-        for parent_key in ("parent1_identifier", "parent2_identifier"):
-            parent_identifier_data = data.get(parent_key)
+        for related_person in related_persons:
+            parent_identifier_data = related_person.get('related_member')
 
             identifier_value = extract_identifier_value(parent_identifier_data)
             if not identifier_value:
                 continue
 
             _logger.debug(
-                f"Checking for parent family member via {parent_key}: {identifier_value}"
+                f"Checking for parent family member via related_member: {identifier_value}"
             )
 
             parent_family_member = session.execute(
@@ -54,7 +56,7 @@ class G2PDciFamilyMemberCreateEnricherService(G2PPayloadEnricherInterface):
                     parent_family_member.link_internal_record_id
                 )
                 _logger.info(
-                    f"Found parent family member via {parent_key}. "
+                    f"Found parent family member via related_member. "
                     f"Link record ID: {parent_link_internal_record_id}"
                 )
                 break
@@ -64,7 +66,7 @@ class G2PDciFamilyMemberCreateEnricherService(G2PPayloadEnricherInterface):
             data["link_internal_record_id"] = parent_link_internal_record_id
         else:
             _logger.warning(
-                "Could not find a parent family member using parent1 or parent2 identifier."
+                "Could not find a parent family member using related_member identifier."
             )
             data["link_internal_record_id"] = None
 
