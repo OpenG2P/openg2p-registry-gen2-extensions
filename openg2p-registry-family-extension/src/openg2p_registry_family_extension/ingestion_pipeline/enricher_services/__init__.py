@@ -9,7 +9,7 @@ from .g2p_family_member_enricher_services import (
     G2PUndpFamilyMemberUpdateEnricherService,
     G2PUndpFamilyMemberDeleteEnricherService
 )
-from g2p_family_enricher_services import (
+from .g2p_family_enricher_services import (
     G2PDciFamilyCreateEnricherService,
     G2PDciFamilyUpdateEnricherService,
     G2PDciFamilyDeleteEnricherService,
