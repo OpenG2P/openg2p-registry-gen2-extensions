@@ -92,7 +92,7 @@ class G2PRegisterFamilyMember(G2PRegister):
     is_pregnant_and_lactating: Mapped[bool] = mapped_column(Boolean, nullable=True)
     is_malnourished_child: Mapped[bool] = mapped_column(Boolean, nullable=True)
 
-    @validates('identifier_type', 'identifier_value', 'surname', 'given_name', 'second_name', 'prefix', 'suffix', 'phone_numbers', 'emails', 'sex', 'birth_date', 'birth_place_name', 'birth_place_lat', 'birth_place_lng', 'death_date', 'death_place', 'address_line1', 'address_line2', 'locality', 'sub_region_code', 'region_code', 'postal_code', 'country_code', 'plus_code', 'geo_lat', 'geo_lng', 'marital_status', 'marriage_date', 'divorce_date', 'parent1_identifier_value', 'parent2_identifier_value')
+    @validates('surname', 'given_name', 'second_name', 'prefix', 'suffix', 'phone_numbers', 'emails', 'sex', 'birth_date', 'birth_place_name', 'birth_place_lat', 'birth_place_lng', 'death_date', 'death_place', 'address_line1', 'address_line2', 'locality', 'sub_region_code', 'region_code', 'postal_code', 'country_code', 'plus_code', 'geo_lat', 'geo_lng', 'marital_status', 'marriage_date', 'divorce_date')
     def update_search_text(self, _key: str, value: str) -> str:
         """
         Automatically update search_text whenever any searchable field is modified.
@@ -107,8 +107,6 @@ class G2PRegisterFamilyMember(G2PRegister):
         """
         searchable_fields: list[str] = [
             # String fields - use 'or ""' for efficiency
-            self.identifier_type or "",
-            self.identifier_value or "",
             self.surname or "",
             self.given_name or "",
             self.second_name or "",
@@ -129,8 +127,6 @@ class G2PRegisterFamilyMember(G2PRegister):
             self.marital_status or "",
             self.marriage_date or "",
             self.divorce_date or "",
-            self.parent1_identifier_value or "",
-            self.parent2_identifier_value or "",
             # Non-string fields - need str() conversion
             str(self.phone_numbers) if self.phone_numbers else "",
             str(self.emails) if self.emails else "",
@@ -168,8 +164,6 @@ class G2PRegisterHistoryFamilyMember(G2PRegisterHistory):
     __tablename__ = "g2p_register_history_family_members"
 
     # Override all columns from G2PRegisterFamilyMemberBase to make them nullable for history
-    identifier_type: Mapped[str] = mapped_column(String, nullable=True)
-    identifier_value: Mapped[str] = mapped_column(String, nullable=True)
     surname: Mapped[str] = mapped_column(String, nullable=True)
     given_name: Mapped[str] = mapped_column(String, nullable=True)
     second_name: Mapped[str] = mapped_column(String, nullable=True)
@@ -197,8 +191,6 @@ class G2PRegisterHistoryFamilyMember(G2PRegisterHistory):
     marital_status: Mapped[str] = mapped_column(String, nullable=True)
     marriage_date: Mapped[str] = mapped_column(String, nullable=True)
     divorce_date: Mapped[str] = mapped_column(String, nullable=True)
-    parent1_identifier_value: Mapped[str] = mapped_column(String, nullable=True)
-    parent2_identifier_value: Mapped[str] = mapped_column(String, nullable=True)
 
     # Social Registry Commons
     education_level: Mapped[str] = mapped_column(String, nullable=True)
