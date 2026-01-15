@@ -18,8 +18,8 @@ class G2PRegisterHouseholdMember(G2PRegister):
     # master_register_id -> household register_id
 
     # DCI fields
-    identifier_type: Mapped[str] = mapped_column(String, nullable=True)
-    identifier_value: Mapped[str] = mapped_column(String, nullable=True)
+    # identifier_type: Mapped[str] = mapped_column(String, nullable=True)
+    # identifier_value: Mapped[str] = mapped_column(String, nullable=True)
     surname: Mapped[str] = mapped_column(String, nullable=True)
     given_name: Mapped[str] = mapped_column(String, nullable=True)
     prefix: Mapped[str] = mapped_column(String, nullable=True)
@@ -35,7 +35,7 @@ class G2PRegisterHouseholdMember(G2PRegister):
     income_level: Mapped[str] = mapped_column(String, nullable=True)
     education_level: Mapped[str] = mapped_column(String, nullable=True)
 
-    @validates('identifier_type', 'identifier_value', 'surname', 'given_name', 'prefix', 'suffix', 'date_of_birth', 'gender', 'mobile_number', 'email', 'marital_status', 'occupation', 'income_level', 'education_level', 'is_disabled')
+    @validates('foundational_id', 'surname', 'given_name', 'prefix', 'suffix', 'date_of_birth', 'gender', 'mobile_number', 'email', 'marital_status', 'occupation', 'income_level', 'education_level', 'is_disabled')
     def update_search_text(self, _key: str, value: str) -> str:
         """
         Automatically update search_text whenever any searchable field is modified.
@@ -49,8 +49,7 @@ class G2PRegisterHouseholdMember(G2PRegister):
         Populate search_text by combining all searchable family member fields.
         """
         searchable_fields: list[str] = [
-            self.identifier_type or "",
-            self.identifier_value or "",
+            self.foundational_id or "",
             self.surname or "",
             self.given_name or "",
             self.prefix or "",
@@ -72,8 +71,8 @@ class G2PRegisterHistoryHouseholdMember(G2PRegisterHistory):
     __tablename__ = "g2p_register_history_household_members"
 
     # Override all columns from G2PRegisterHouseholdMemberBase to make them nullable for history
-    identifier_type: Mapped[str] = mapped_column(String, nullable=True)
-    identifier_value: Mapped[str] = mapped_column(String, nullable=True)
+    # identifier_type: Mapped[str] = mapped_column(String, nullable=True)
+    # identifier_value: Mapped[str] = mapped_column(String, nullable=True)
     surname: Mapped[str] = mapped_column(String, nullable=True)
     given_name: Mapped[str] = mapped_column(String, nullable=True)
     prefix: Mapped[str] = mapped_column(String, nullable=True)

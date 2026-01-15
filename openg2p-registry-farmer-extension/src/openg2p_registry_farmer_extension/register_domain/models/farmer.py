@@ -16,8 +16,8 @@ class G2PRegisterFarmer(G2PRegister):
     # master_register_id -> household register_id
     
     # DCI fields
-    identifier_type: Mapped[str] = mapped_column(String, nullable=True)
-    identifier_value: Mapped[str] = mapped_column(String, nullable=True)
+    # identifier_type: Mapped[str] = mapped_column(String, nullable=True)
+    # identifier_value: Mapped[str] = mapped_column(String, nullable=True)
     first_name: Mapped[str] = mapped_column(String, nullable=True)
     last_name: Mapped[str] = mapped_column(String, nullable=True)
     date_of_birth: Mapped[str] = mapped_column(Date, nullable=True)
@@ -31,7 +31,8 @@ class G2PRegisterFarmer(G2PRegister):
     mobile_number: Mapped[str] = mapped_column(String, nullable=True)
     email: Mapped[str] = mapped_column(String, nullable=True)
 
-    @validates('identifier_value', 'first_name', 'last_name', 'date_of_birth', 'gender', 'address', 'district', 'region', 'mobile_number', 'email', 'marital_status', 'is_disabled')
+
+    @validates('foundational_id', 'first_name', 'last_name', 'date_of_birth', 'gender', 'address', 'district', 'region', 'mobile_number', 'email', 'marital_status', 'is_disabled')
     def update_search_text(self, _key: str, value: str) -> str:
         """
         Automatically update search_text whenever any searchable field is modified.
@@ -45,7 +46,7 @@ class G2PRegisterFarmer(G2PRegister):
         Populate search_text by combining all searchable farmer fields.
         """
         searchable_fields: list[str] = [
-            self.identifier_value or "",
+            self.foundational_id or "",
             self.first_name or "",
             self.last_name or "",
             str(self.date_of_birth) if self.date_of_birth else "",
@@ -65,8 +66,8 @@ class G2PRegisterHistoryFarmer(G2PRegisterHistory):
     __tablename__ = "g2p_register_history_farmers"
 
     # Override all columns from G2PRegisterFarmerBase to make them nullable for history
-    identifier_type: Mapped[str] = mapped_column(String, nullable=True)
-    identifier_value: Mapped[str] = mapped_column(String, nullable=True)
+    # identifier_type: Mapped[str] = mapped_column(String, nullable=True)
+    # identifier_value: Mapped[str] = mapped_column(String, nullable=True)
     first_name: Mapped[str] = mapped_column(String, nullable=True)
     last_name: Mapped[str] = mapped_column(String, nullable=True)
 

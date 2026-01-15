@@ -16,8 +16,8 @@ class G2PRegisterHousehold(G2PRegister):
     # master_register_id -> NONE
 
     # DCI fields
-    identifier_type: Mapped[str] = mapped_column(String, nullable=True)
-    identifier_value: Mapped[str] = mapped_column(String, nullable=True)
+    # identifier_type: Mapped[str] = mapped_column(String, nullable=True)
+    # identifier_value: Mapped[str] = mapped_column(String, nullable=True)
 
     address: Mapped[str] = mapped_column(String, nullable=True)
     district: Mapped[str] = mapped_column(String, nullable=True)
@@ -26,7 +26,7 @@ class G2PRegisterHousehold(G2PRegister):
     poverty_score_type: Mapped[str] = mapped_column(String, nullable=True)
     household_head: Mapped[str] = mapped_column(String, nullable=True)
 
-    @validates('address', 'district', 'region', 'poverty_score', 'poverty_score_type', 'household_head')
+    @validates('functional_record_id', 'address', 'district', 'region', 'poverty_score', 'poverty_score_type', 'household_head')
     def update_search_text(self, _key: str, value: str) -> str:
         """
         Automatically update search_text whenever any searchable field is modified.
@@ -40,6 +40,7 @@ class G2PRegisterHousehold(G2PRegister):
         Populate search_text by combining all searchable fields.
         """
         searchable_fields: list[str] = [
+            self.functional_record_id or "",
             self.address or "",
             self.district or "",
             self.region or "",
@@ -55,8 +56,8 @@ class G2PRegisterHistoryHousehold(G2PRegisterHistory):
     __tablename__ = "g2p_register_history_households"
 
     # Override all columns from base to make them nullable for history
-    identifier_type: Mapped[str] = mapped_column(String, nullable=True)
-    identifier_value: Mapped[str] = mapped_column(String, nullable=True)
+    # identifier_type: Mapped[str] = mapped_column(String, nullable=True)
+    # identifier_value: Mapped[str] = mapped_column(String, nullable=True)
 
     address: Mapped[str] = mapped_column(String, nullable=True)
     district: Mapped[str] = mapped_column(String, nullable=True)
