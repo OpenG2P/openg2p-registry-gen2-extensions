@@ -62,6 +62,39 @@ class G2PDciFamilyMemberDeleteEnricherService(G2PPayloadEnricherInterface):
         _logger.info("Processing G2PDciFamilyMemberDeleteEnricherService")
         return data
 
+class G2PDciVcFamilyMemberCreateEnricherService(G2PPayloadEnricherInterface):
+    def enrich(self, data: Dict, session: Session) -> Dict:
+        _logger.info("Processing G2PDciVcFamilyMemberCreateEnricherService")
+
+        parent_link_internal_record_id = None
+
+        parents = data.get('parent')
+        if isinstance(parents, list):
+            for parent in parents:
+                identifier_value = parent.get('identifier')
+                if identifier_value:
+                    _logger.debug(f"Checking for parent family member with identifier: {identifier_value}")
+                    parent_family_member = session.execute(
+                        select(G2PRegisterFamilyMember).filter_by(foundational_id=identifier_value)
+                    ).scalar_one_or_none()
+
+                    if parent_family_member:
+                        parent_link_internal_record_id = parent_family_member.link_internal_record_id
+                        _logger.info(f"Found parent family member via identifier. Link record ID: {parent_link_internal_record_id}")
+                        data['link_internal_record_id'] = parent_link_internal_record_id
+                        break
+        return data
+
+class G2PDciVcFamilyMemberUpdateEnricherService(G2PPayloadEnricherInterface):
+    def enrich(self, data: Dict, session: Session) -> Dict:
+        _logger.info("Processing G2PDciVcFamilyMemberUpdateEnricherService")
+        return data
+
+class G2PDciVcFamilyMemberDeleteEnricherService(G2PPayloadEnricherInterface):
+    def enrich(self, data: Dict, session: Session) -> Dict:
+        _logger.info("Processing G2PDciVcFamilyMemberDeleteEnricherService")
+        return data
+
 # SPDCI Payload Enrichers
 class G2PSpdciFamilyMemberCreateEnricherService(G2PPayloadEnricherInterface):
     def enrich(self, data: Dict, session: Session) -> Dict:
