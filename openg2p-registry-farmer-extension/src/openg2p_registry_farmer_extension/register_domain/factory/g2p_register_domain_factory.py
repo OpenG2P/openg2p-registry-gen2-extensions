@@ -8,6 +8,6 @@ class G2PRegisterDomainFactory(BaseService):
     g2p_register_domain_service: G2PRegisterDomainService = None
     
     def get_domain_service(self, register_mnemonic: str) -> G2PRegisterDomainService:
-        if register_mnemonic == "farmer":
+        if register_mnemonic.upper() == "FARMER":
             g2p_register_domain_service = G2PRegisterFarmerDomainService.get_component()
             return g2p_register_domain_service
