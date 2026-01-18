@@ -5,7 +5,7 @@ from openg2p_registry_core.schemas.payload import ChangeRequestRequestPayload
 
 _logger = logging.getLogger('g2p-register-domain-service')
 
-class G2PRegisterFarmerDomainService(G2PRegisterDomainService):
+class G2PRegisterCropDomainService(G2PRegisterDomainService):
     pass
 
     async def validate_domain_attributes(self, change_request_request_payload: ChangeRequestRequestPayload):
