@@ -1,1 +1,7 @@
 from .farmer import G2PRegisterSchemaFarmer, G2PRegisterHistorySchemaFarmer
+from .household import G2PRegisterSchemaHousehold, G2PRegisterHistorySchemaHousehold
+from .household_member import G2PRegisterSchemaHouseholdMember, G2PRegisterHistorySchemaHouseholdMember
+from .crop import G2PRegisterSchemaCrop, G2PRegisterHistorySchemaCrop
+from .land import G2PRegisterSchemaLand, G2PRegisterHistorySchemaLand
+from .livestock import G2PRegisterSchemaLivestock, G2PRegisterHistorySchemaLivestock
+from .machinery import G2PRegisterSchemaMachinery, G2PRegisterHistorySchemaMachinery

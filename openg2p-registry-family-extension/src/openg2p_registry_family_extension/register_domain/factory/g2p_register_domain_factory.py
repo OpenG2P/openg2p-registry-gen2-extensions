@@ -9,10 +9,10 @@ class G2PRegisterDomainFactory(BaseService):
     g2p_register_domain_service: G2PRegisterDomainService = None
     
     def get_domain_service(self, register_mnemonic: str) -> Optional[G2PRegisterDomainService]:
-        if register_mnemonic == "family":
+        if register_mnemonic.upper() == "FAMILY":
             g2p_register_domain_service = G2PRegisterFamilyDomainService.get_component()
             return g2p_register_domain_service
-        if register_mnemonic == "family_member":
+        if register_mnemonic.upper() == "FAMILYMEMBER":
             g2p_register_domain_service = G2PRegisterFamilyMemberDomainService.get_component()
             return g2p_register_domain_service
         return None
