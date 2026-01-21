@@ -1,1 +1,2 @@
-from .farmer import G2PRegisterSchemaFarmer, G2PRegisterHistorySchemaFarmer
+from .family import G2PRegisterSchemaFamily, G2PRegisterHistorySchemaFamily
+from .family_member import G2PRegisterSchemaFamilyMember, G2PRegisterHistorySchemaFamilyMember
