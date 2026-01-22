@@ -1,5 +1,5 @@
 from sqlalchemy import String, Boolean, DateTime, Date, Float
-from sqlalchemy.orm import Mapped, mapped_column, validates
+from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.dialects.postgresql import JSONB
 from openg2p_registry_core.models import G2PRegister, G2PRegisterHistory
 from openg2p_fastapi_common.models import BaseORMModel
@@ -92,21 +92,13 @@ class G2PRegisterFamilyMember(G2PRegister):
     is_pregnant_and_lactating: Mapped[bool] = mapped_column(Boolean, nullable=True)
     is_malnourished_child: Mapped[bool] = mapped_column(Boolean, nullable=True)
 
-    @validates('surname', 'given_name', 'second_name', 'prefix', 'suffix', 'phone_numbers', 'emails', 'sex', 'birth_date', 'birth_place_name', 'birth_place_lat', 'birth_place_lng', 'death_date', 'death_place', 'address_line1', 'address_line2', 'locality', 'sub_region_code', 'region_code', 'postal_code', 'country_code', 'plus_code', 'geo_lat', 'geo_lng', 'marital_status', 'marriage_date', 'divorce_date')
-    def update_search_text(self, _key: str, value: str) -> str:
+    def get_search_text_fields(self) -> list[str]:
         """
-        Automatically update search_text whenever any searchable field is modified.
-        Combines all searchable fields into a single text for trigram search.
+        Return family member-specific fields for search text aggregation.
+        G2PRegister fields are automatically included via event listeners.
         """
-        self._populate_search_text()
-        return value
-
-    def _populate_search_text(self) -> None:
-        """
-        Populate search_text by combining all searchable family member fields.
-        """
-        searchable_fields: list[str] = [
-            # String fields - use 'or ""' for efficiency
+        return [
+            # String fields
             self.surname or "",
             self.given_name or "",
             self.second_name or "",
@@ -135,7 +127,6 @@ class G2PRegisterFamilyMember(G2PRegister):
             str(self.birth_place_lng) if self.birth_place_lng is not None else "",
             str(self.geo_lat) if self.geo_lat is not None else "",
             str(self.geo_lng) if self.geo_lng is not None else "",
-
             # Social Registry Commons
             self.education_level or "",
             self.employment_status or "",
@@ -143,21 +134,20 @@ class G2PRegisterFamilyMember(G2PRegister):
             self.relationship_with_household_head or "",
             self.sources_of_income or "",
             self.annual_income or "",
-            self.owns_a_two_wheeler or "",
-            self.owns_a_three_wheeler or "",
-            self.owns_a_four_wheeler or "",
-            self.owns_a_cart or "",
-            self.land_ownership or "",
+            str(self.owns_a_two_wheeler) if self.owns_a_two_wheeler is not None else "",
+            str(self.owns_a_three_wheeler) if self.owns_a_three_wheeler is not None else "",
+            str(self.owns_a_four_wheeler) if self.owns_a_four_wheeler is not None else "",
+            str(self.owns_a_cart) if self.owns_a_cart is not None else "",
+            str(self.land_ownership) if self.land_ownership is not None else "",
             self.type_of_land_owned or "",
             self.land_size or "",
-            self.owns_house or "",
-            self.owns_livestock or "",
-            self.is_head or "",
-            self.is_disabled or "",
-            self.is_pregnant_and_lactating or "",
-            self.is_malnourished_child or "",
+            str(self.owns_house) if self.owns_house is not None else "",
+            str(self.owns_livestock) if self.owns_livestock is not None else "",
+            str(self.is_head) if self.is_head is not None else "",
+            str(self.is_disabled) if self.is_disabled is not None else "",
+            str(self.is_pregnant_and_lactating) if self.is_pregnant_and_lactating is not None else "",
+            str(self.is_malnourished_child) if self.is_malnourished_child is not None else "",
         ]
-        self.search_text = " ".join(searchable_fields).strip()
 
 # All Register History classes should have the prefix G2PRegisterHistory
 class G2PRegisterHistoryFamilyMember(G2PRegisterHistory):

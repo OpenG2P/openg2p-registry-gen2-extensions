@@ -1,5 +1,11 @@
+import importlib
+import logging
+from typing import Optional
+
 from openg2p_fastapi_common.service import BaseService
 from openg2p_registry_core.services import G2PRegisterDomainService
+
+_logger = logging.getLogger('g2p-register-domain-factory')
 
 from ..services import G2PRegisterFarmerDomainService
 
@@ -7,31 +13,16 @@ class G2PRegisterDomainFactory(BaseService):
 
     g2p_register_domain_service: G2PRegisterDomainService = None
     
-    def get_domain_service(self, register_mnemonic: str) -> G2PRegisterDomainService:
-        if register_mnemonic.upper() == "FARMER":
-            g2p_register_domain_service = G2PRegisterFarmerDomainService.get_component()
+    def get_domain_service(self, register_mnemonic: str) -> Optional[G2PRegisterDomainService]:
+        
+        try:
+            module = importlib.import_module(f"openg2p_registry_family_extension.register_domain.services")
+            register_class_prefix: str = "G2PRegisterDomainService"
+            implementation_class_name: str = f"{register_class_prefix}{register_mnemonic}"
+            implementation_class = getattr(module, implementation_class_name)
+            _logger.info(f"Found specific implementation for register mnemonic '{register_mnemonic}': {implementation_class_name}")
+            g2p_register_domain_service: G2PRegisterDomainService = implementation_class.get_component()
             return g2p_register_domain_service
-        if register_mnemonic.upper() == "HOUSEHOLD":
-            from ..services import G2PRegisterHouseholdDomainService
-            g2p_register_domain_service = G2PRegisterHouseholdDomainService.get_component()
-            return g2p_register_domain_service
-        if register_mnemonic.upper() == "HOUSEHOLDMEMBER":
-            from ..services import G2PRegisterHouseholdMemberDomainService
-            g2p_register_domain_service = G2PRegisterHouseholdMemberDomainService.get_component()
-            return g2p_register_domain_service
-        if register_mnemonic.upper() == "LAND":
-            from ..services import G2PRegisterLandDomainService
-            g2p_register_domain_service = G2PRegisterLandDomainService.get_component()
-            return g2p_register_domain_service
-        if register_mnemonic.upper() == "LIVESTOCK":
-            from ..services import G2PRegisterLivestockDomainService
-            g2p_register_domain_service = G2PRegisterLivestockDomainService.get_component()
-            return g2p_register_domain_service
-        if register_mnemonic.upper() == "CROP":
-            from ..services import G2PRegisterCropDomainService
-            g2p_register_domain_service = G2PRegisterCropDomainService.get_component()
-            return g2p_register_domain_service
-        if register_mnemonic.upper() == "MACHINERY":
-            from ..services import G2PRegisterMachineryDomainService
-            g2p_register_domain_service = G2PRegisterMachineryDomainService.get_component()
-            return g2p_register_domain_service
+        except (AttributeError, ModuleNotFoundError) as error:
+            _logger.warning(f"Could not find specific implementation for register mnemonic '{register_mnemonic}': {error}. Falling back to default implementations.")
+            return None

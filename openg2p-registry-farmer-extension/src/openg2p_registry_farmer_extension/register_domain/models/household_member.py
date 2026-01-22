@@ -1,5 +1,5 @@
 from sqlalchemy import String, Boolean, DateTime, Date, Float
-from sqlalchemy.orm import Mapped, mapped_column, validates
+from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.dialects.postgresql import JSONB
 from openg2p_registry_core.models import G2PRegister, G2PRegisterHistory
 from openg2p_fastapi_common.models import BaseORMModel
@@ -35,21 +35,12 @@ class G2PRegisterHouseholdMember(G2PRegister):
     income_level: Mapped[str] = mapped_column(String, nullable=True)
     education_level: Mapped[str] = mapped_column(String, nullable=True)
 
-    @validates('foundational_id', 'surname', 'given_name', 'prefix', 'suffix', 'date_of_birth', 'gender', 'mobile_number', 'email', 'marital_status', 'occupation', 'income_level', 'education_level', 'is_disabled')
-    def update_search_text(self, _key: str, value: str) -> str:
+    def get_search_text_fields(self) -> list[str]:
         """
-        Automatically update search_text whenever any searchable field is modified.
-        Combines all searchable fields into a single text for trigram search.
+        Return household member-specific fields for search text aggregation.
+        G2PRegister fields are automatically included via event listeners.
         """
-        self._populate_search_text()
-        return value
-
-    def _populate_search_text(self) -> None:
-        """
-        Populate search_text by combining all searchable family member fields.
-        """
-        searchable_fields: list[str] = [
-            self.foundational_id or "",
+        return [
             self.surname or "",
             self.given_name or "",
             self.prefix or "",
@@ -62,9 +53,8 @@ class G2PRegisterHouseholdMember(G2PRegister):
             self.occupation or "",
             self.income_level or "",
             self.education_level or "",
-            str(self.is_disabled) if self.is_disabled is not None else ""
+            str(self.is_disabled) if self.is_disabled is not None else "",
         ]
-        self.search_text = " ".join(searchable_fields).strip()
 
 # All Register History classes should have the prefix G2PRegisterHistory
 class G2PRegisterHistoryHouseholdMember(G2PRegisterHistory):

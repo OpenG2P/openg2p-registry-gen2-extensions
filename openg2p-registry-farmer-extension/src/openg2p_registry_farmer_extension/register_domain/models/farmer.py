@@ -1,11 +1,11 @@
 from sqlalchemy import String, Date, Boolean
-from sqlalchemy.orm import Mapped, mapped_column, validates
-from openg2p_registry_core.models import G2PRegister, G2PRegisterHistory
+from sqlalchemy.orm import Mapped, mapped_column
+from openg2p_registry_core.models import G2PRegister, G2PRegisterHistory, G2PGeo
 from openg2p_fastapi_common.models import BaseORMModel
 
 
 # All Register classes should have the prefix G2PRegister
-class G2PRegisterFarmer(G2PRegister):
+class G2PRegisterFarmer(G2PRegister, G2PGeo):
     __tablename__ = "g2p_register_farmers"
 
     # internal_record_id
@@ -31,35 +31,24 @@ class G2PRegisterFarmer(G2PRegister):
     mobile_number: Mapped[str] = mapped_column(String, nullable=True)
     email: Mapped[str] = mapped_column(String, nullable=True)
 
-
-    @validates('foundational_id', 'first_name', 'last_name', 'date_of_birth', 'gender', 'address', 'district', 'region', 'mobile_number', 'email', 'marital_status', 'is_disabled')
-    def update_search_text(self, _key: str, value: str) -> str:
+    def get_search_text_fields(self) -> list[str]:
         """
-        Automatically update search_text whenever any searchable field is modified.
-        Combines all searchable fields into a single text for trigram search.
+        Return farmer-specific fields for search text aggregation.
+        G2PRegister and G2PGeo fields are automatically included via event listeners.
         """
-        self._populate_search_text()
-        return value
-
-    def _populate_search_text(self) -> None:
-        """
-        Populate search_text by combining all searchable farmer fields.
-        """
-        searchable_fields: list[str] = [
-            self.foundational_id or "",
+        return [
             self.first_name or "",
             self.last_name or "",
             str(self.date_of_birth) if self.date_of_birth else "",
             self.gender or "",
+            self.marital_status or "",
+            str(self.is_disabled) if self.is_disabled is not None else "",
             self.address or "",
             self.district or "",
             self.region or "",
             self.mobile_number or "",
             self.email or "",
-            self.marital_status or "",
-            str(self.is_disabled) if self.is_disabled is not None else ""
         ]
-        self.search_text = " ".join(searchable_fields).strip()
 
 # All Register History classes should have the prefix G2PRegisterHistory
 class G2PRegisterHistoryFarmer(G2PRegisterHistory):

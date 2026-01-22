@@ -3,11 +3,11 @@ import logging
 from openg2p_registry_core.services import G2PRegisterDomainService
 from openg2p_registry_core.schemas.payload import ChangeRequestRequestPayload
 
-_logger = logging.getLogger('g2p-register-domain-service')
+_logger = logging.getLogger('g2p-register-family-service')
 
-class G2PRegisterFarmerDomainService(G2PRegisterDomainService):
+class G2PRegisterDomainServiceFamily(G2PRegisterDomainService):
     pass
 
     async def validate_domain_attributes(self, change_request_request_payload: ChangeRequestRequestPayload):
-        _logger.info("Validating farmer domain attributes")
+        _logger.info("Validating family domain attributes")
         pass

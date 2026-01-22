@@ -1,11 +1,11 @@
 from sqlalchemy import String, Integer, Float
-from sqlalchemy.orm import Mapped, mapped_column, validates
-from openg2p_registry_core.models import G2PRegister, G2PRegisterHistory
+from sqlalchemy.orm import Mapped, mapped_column
+from openg2p_registry_core.models import G2PRegister, G2PRegisterHistory, G2PGeo
 from openg2p_fastapi_common.models import BaseORMModel
 
 
 # All Register classes should have the prefix G2PRegister
-class G2PRegisterHousehold(G2PRegister):
+class G2PRegisterHousehold(G2PRegister, G2PGeo):
     __tablename__ = "g2p_register_households"
 
     # internal_record_id
@@ -26,29 +26,19 @@ class G2PRegisterHousehold(G2PRegister):
     poverty_score_type: Mapped[str] = mapped_column(String, nullable=True)
     household_head: Mapped[str] = mapped_column(String, nullable=True)
 
-    @validates('functional_record_id', 'address', 'district', 'region', 'poverty_score', 'poverty_score_type', 'household_head')
-    def update_search_text(self, _key: str, value: str) -> str:
+    def get_search_text_fields(self) -> list[str]:
         """
-        Automatically update search_text whenever any searchable field is modified.
-        Combines all searchable fields into a single text for trigram search.
+        Return household-specific fields for search text aggregation.
+        G2PRegister and G2PGeo fields are automatically included via event listeners.
         """
-        self._populate_search_text()
-        return value
-
-    def _populate_search_text(self) -> None:
-        """
-        Populate search_text by combining all searchable fields.
-        """
-        searchable_fields: list[str] = [
-            self.functional_record_id or "",
+        return [
             self.address or "",
             self.district or "",
             self.region or "",
             str(self.poverty_score) if self.poverty_score is not None else "",
             self.poverty_score_type or "",
-            self.household_head or ""
+            self.household_head or "",
         ]
-        self.search_text = " ".join(searchable_fields).strip()
 
 
 # All Register History classes should have the prefix G2PRegisterHistory
