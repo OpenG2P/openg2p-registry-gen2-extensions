@@ -1,11 +1,11 @@
 from sqlalchemy import String, Float, Date
-from sqlalchemy.orm import Mapped, mapped_column, validates
-from openg2p_registry_core.models import G2PRegister, G2PRegisterHistory
+from sqlalchemy.orm import Mapped, mapped_column
+from openg2p_registry_core.models import G2PRegister, G2PRegisterHistory, G2PGeo, G2PGeoShape
 from openg2p_fastapi_common.models import BaseORMModel
 
 
 # All Register classes should have the prefix G2PRegister
-class G2PRegisterLand(G2PRegister):
+class G2PRegisterLand(G2PRegister, G2PGeo, G2PGeoShape):
     __tablename__ = "g2p_register_lands"
 
     # internal_record_id
@@ -20,26 +20,17 @@ class G2PRegisterLand(G2PRegister):
     land_size: Mapped[float] = mapped_column(Float, nullable=True)
     measurement: Mapped[str] = mapped_column(String, nullable=True)
 
-    @validates('location', 'land_tenure', 'land_size', 'measurement')
-    def update_search_text(self, _key: str, value: str) -> str:
+    def get_search_text_fields(self) -> list[str]:
         """
-        Automatically update search_text whenever any searchable field is modified.
-        Combines all searchable fields into a single text for trigram search.
+        Return land-specific fields for search text aggregation.
+        G2PRegister, G2PGeo, and G2PGeoShape fields are automatically included via event listeners.
         """
-        self._populate_search_text()
-        return value
-
-    def _populate_search_text(self) -> None:
-        """
-        Populate search_text by combining all searchable fields.
-        """
-        searchable_fields: list[str] = [
+        return [
             self.location or "",
             self.land_tenure or "",
             str(self.land_size) if self.land_size is not None else "",
-            self.measurement or ""
+            self.measurement or "",
         ]
-        self.search_text = " ".join(searchable_fields).strip()
 
 
 # All Register History classes should have the prefix G2PRegisterHistory

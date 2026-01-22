@@ -1,5 +1,5 @@
 from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column, validates
+from sqlalchemy.orm import Mapped, mapped_column
 from openg2p_registry_core.models import G2PRegister, G2PRegisterHistory
 from openg2p_fastapi_common.models import BaseORMModel
 import uuid
@@ -25,20 +25,12 @@ class G2PRegisterCrop(G2PRegister):
     irrigation_water: Mapped[str] = mapped_column(String, nullable=True)
     fertilizer_type: Mapped[str] = mapped_column(String, nullable=True)
 
-    @validates('activity_group', 'crop_type', 'variety', 'season', 'end_use', 'irrigation', 'irrigation_water', 'fertilizer_type')
-    def update_search_text(self, _key: str, value: str) -> str:
+    def get_search_text_fields(self) -> list[str]:
         """
-        Automatically update search_text whenever any searchable field is modified.
-        Combines all searchable fields into a single text for trigram search.
+        Return crop-specific fields for search text aggregation.
+        G2PRegister fields are automatically included via event listeners.
         """
-        self._populate_search_text()
-        return value
-
-    def _populate_search_text(self) -> None:
-        """
-        Populate search_text by combining all searchable family fields.
-        """
-        searchable_fields: list[str] = [
+        return [
             self.activity_group or "",
             self.crop_type or "",
             self.variety or "",
@@ -46,9 +38,8 @@ class G2PRegisterCrop(G2PRegister):
             self.end_use or "",
             self.irrigation or "",
             self.irrigation_water or "",
-            self.fertilizer_type or ""
+            self.fertilizer_type or "",
         ]
-        self.search_text = " ".join(searchable_fields).strip()
 
 # All Register History classes should have the prefix G2PRegisterHistory
 class G2PRegisterHistoryCrop(G2PRegisterHistory):

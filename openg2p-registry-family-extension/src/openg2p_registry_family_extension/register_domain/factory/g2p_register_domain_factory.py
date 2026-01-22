@@ -1,18 +1,30 @@
 from typing import Optional
+import importlib
+import logging
 from openg2p_fastapi_common.service import BaseService
 from openg2p_registry_core.services import G2PRegisterDomainService
 
-from ..services import G2PRegisterFamilyDomainService, G2PRegisterFamilyMemberDomainService
+_logger = logging.getLogger('g2p-register-domain-factory')
+
+from ..services import G2PRegisterDomainServiceFamily, G2PRegisterDomainServiceFamilyMember
 
 class G2PRegisterDomainFactory(BaseService):
 
     g2p_register_domain_service: G2PRegisterDomainService = None
     
     def get_domain_service(self, register_mnemonic: str) -> Optional[G2PRegisterDomainService]:
-        if register_mnemonic.upper() == "FAMILY":
-            g2p_register_domain_service = G2PRegisterFamilyDomainService.get_component()
+        
+        try:
+            module = importlib.import_module(f"openg2p_registry_family_extension.register_domain.services")
+            register_class_prefix: str = "G2PRegisterDomainService"
+            implementation_class_name: str = f"{register_class_prefix}{register_mnemonic}"
+            implementation_class = getattr(module, implementation_class_name)
+            _logger.info(f"Found specific implementation for register mnemonic '{register_mnemonic}': {implementation_class_name}")
+            g2p_register_domain_service: G2PRegisterDomainService = implementation_class.get_component()
             return g2p_register_domain_service
-        if register_mnemonic.upper() == "FAMILYMEMBER":
-            g2p_register_domain_service = G2PRegisterFamilyMemberDomainService.get_component()
-            return g2p_register_domain_service
-        return None
+        except (AttributeError, ModuleNotFoundError) as error:
+            _logger.warning(f"Could not find specific implementation for register mnemonic '{register_mnemonic}': {error}. Falling back to default implementations.")
+            return None
+            
+
+       

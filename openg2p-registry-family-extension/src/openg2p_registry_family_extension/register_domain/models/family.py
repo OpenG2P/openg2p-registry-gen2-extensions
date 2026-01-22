@@ -1,5 +1,5 @@
 from sqlalchemy import String, Integer, Boolean
-from sqlalchemy.orm import Mapped, mapped_column, validates
+from sqlalchemy.orm import Mapped, mapped_column
 from openg2p_registry_core.models import G2PRegister, G2PRegisterHistory
 from openg2p_fastapi_common.models import BaseORMModel
 import uuid
@@ -9,12 +9,6 @@ import uuid
 class G2PRegisterFamily(G2PRegister):
     __tablename__ = "g2p_register_families"
 
-    # internal_record_id
-    # functional_record_id -> family_id
-    # foundational_id -> NONE
-    # link_foundational_id -> NONE
-    # link_internal_record_id -> NONE
-    # master_register_id -> NONE
     family_name: Mapped[str] = mapped_column(String, nullable=True)
 
     type_of_housing: Mapped[str] = mapped_column(String, nullable=True)
@@ -27,20 +21,12 @@ class G2PRegisterFamily(G2PRegister):
     belong_to_protected_groups: Mapped[bool] = mapped_column(Boolean, nullable=True)
     under_other_vulnerable_status: Mapped[bool] = mapped_column(Boolean, nullable=True)
 
-    @validates('family_name', 'type_of_housing', 'house_condition', 'sanitation_condition', 'water_access', 'electricity_access', 'ethnic_group', 'belong_to_protected_groups', 'under_other_vulnerable_status')
-    def update_search_text(self, _key: str, value: str) -> str:
+    def get_search_text_fields(self) -> list[str]:
         """
-        Automatically update search_text whenever any searchable field is modified.
-        Combines all searchable fields into a single text for trigram search.
+        Return family-specific fields for search text aggregation.
+        G2PRegister fields are automatically included via event listeners.
         """
-        self._populate_search_text()
-        return value
-
-    def _populate_search_text(self) -> None:
-        """
-        Populate search_text by combining all searchable family fields.
-        """
-        searchable_fields: list[str] = [
+        return [
             self.family_name or "",
             self.type_of_housing or "",
             self.house_condition or "",
@@ -49,9 +35,8 @@ class G2PRegisterFamily(G2PRegister):
             self.electricity_access or "",
             self.ethnic_group or "",
             str(self.belong_to_protected_groups) if self.belong_to_protected_groups is not None else "",
-            str(self.under_other_vulnerable_status) if self.under_other_vulnerable_status is not None else ""
+            str(self.under_other_vulnerable_status) if self.under_other_vulnerable_status is not None else "",
         ]
-        self.search_text = " ".join(searchable_fields).strip()
 
 # All Register History classes should have the prefix G2PRegisterHistory
 class G2PRegisterHistoryFamily(G2PRegisterHistory):

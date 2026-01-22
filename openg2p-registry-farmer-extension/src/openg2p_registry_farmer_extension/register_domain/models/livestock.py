@@ -1,5 +1,5 @@
 from sqlalchemy import String, Float, Integer
-from sqlalchemy.orm import Mapped, mapped_column, validates
+from sqlalchemy.orm import Mapped, mapped_column
 from openg2p_registry_core.models import G2PRegister, G2PRegisterHistory
 from openg2p_fastapi_common.models import BaseORMModel
 
@@ -18,25 +18,16 @@ class G2PRegisterLivestock(G2PRegister):
     count: Mapped[int] = mapped_column(Integer, nullable=True)
     livestock_system: Mapped[str] = mapped_column(String, nullable=True)
 
-    @validates('livestock_type', 'count', 'livestock_system')
-    def update_search_text(self, _key: str, value: str) -> str:
+    def get_search_text_fields(self) -> list[str]:
         """
-        Automatically update search_text whenever any searchable field is modified.
-        Combines all searchable fields into a single text for trigram search.
+        Return livestock-specific fields for search text aggregation.
+        G2PRegister fields are automatically included via event listeners.
         """
-        self._populate_search_text()
-        return value
-
-    def _populate_search_text(self) -> None:
-        """
-        Populate search_text by combining all searchable fields.
-        """
-        searchable_fields: list[str] = [
+        return [
             self.livestock_type or "",
             str(self.count) if self.count is not None else "",
-            self.livestock_system or ""
+            self.livestock_system or "",
         ]
-        self.search_text = " ".join(searchable_fields).strip()
 
 
 # All Register History classes should have the prefix G2PRegisterHistory
