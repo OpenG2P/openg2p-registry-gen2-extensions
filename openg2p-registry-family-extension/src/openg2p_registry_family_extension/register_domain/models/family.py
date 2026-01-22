@@ -9,12 +9,6 @@ import uuid
 class G2PRegisterFamily(G2PRegister):
     __tablename__ = "g2p_register_families"
 
-    # internal_record_id
-    # functional_record_id -> family_id
-    # foundational_id -> NONE
-    # link_foundational_id -> NONE
-    # link_internal_record_id -> NONE
-    # master_register_id -> NONE
     family_name: Mapped[str] = mapped_column(String, nullable=True)
 
     type_of_housing: Mapped[str] = mapped_column(String, nullable=True)
