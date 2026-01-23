@@ -10,16 +10,6 @@ from datetime import datetime, date
 class G2PRegisterFamilyMember(G2PRegister, G2PPerson, G2PGeo):
     __tablename__ = "g2p_register_family_members"
 
-
-    # Birthplace details
-    birth_place_name: Mapped[str] = mapped_column(String, nullable=True)
-    birth_place_lat: Mapped[float] = mapped_column(Float, nullable=True)
-    birth_place_lng: Mapped[float] = mapped_column(Float, nullable=True)
-
-    # Death details
-    death_date: Mapped[str] = mapped_column(String, nullable=True)
-    death_place: Mapped[str] = mapped_column(String, nullable=True)
-
     # Additional marital info
     marriage_date: Mapped[str] = mapped_column(String, nullable=True)
     divorce_date: Mapped[str] = mapped_column(String, nullable=True)

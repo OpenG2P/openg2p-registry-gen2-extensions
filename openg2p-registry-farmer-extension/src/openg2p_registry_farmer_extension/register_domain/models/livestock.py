@@ -8,12 +8,6 @@ from openg2p_fastapi_common.models import BaseORMModel
 class G2PRegisterLivestock(G2PRegister):
     __tablename__ = "g2p_register_livestocks"
 
-    # internal_record_id
-    # functional_record_id -> NONE
-    # foundational_id -> NONE
-    # link_foundational_id -> NONE
-    # link_internal_record_id -> land's internal_record_id
-    # master_register_id -> land register_id
     livestock_type: Mapped[str] = mapped_column(String, nullable=True)
     count: Mapped[int] = mapped_column(Integer, nullable=True)
     livestock_system: Mapped[str] = mapped_column(String, nullable=True)

@@ -9,9 +9,6 @@ class G2PRegisterFarmer(G2PRegister, G2PPerson, G2PGeo):
     __tablename__ = "g2p_register_farmers"
 
     is_disabled: Mapped[bool] = mapped_column(Boolean, nullable=True)
-    address: Mapped[str] = mapped_column(String, nullable=True)
-    district: Mapped[str] = mapped_column(String, nullable=True)
-    region: Mapped[str] = mapped_column(String, nullable=True)
 
     def get_search_text_fields(self) -> list[str]:
         """
@@ -20,9 +17,6 @@ class G2PRegisterFarmer(G2PRegister, G2PPerson, G2PGeo):
         """
         return [
             str(self.is_disabled) if self.is_disabled is not None else "",
-            self.address or "",
-            self.district or "",
-            self.region or "",
         ]
 
 
@@ -59,6 +53,3 @@ class G2PRegisterHistoryFarmer(G2PRegisterHistory):
 
     # Farmer-specific fields for history
     is_disabled: Mapped[bool] = mapped_column(Boolean, nullable=True)
-    address: Mapped[str] = mapped_column(String, nullable=True)
-    district: Mapped[str] = mapped_column(String, nullable=True)
-    region: Mapped[str] = mapped_column(String, nullable=True)

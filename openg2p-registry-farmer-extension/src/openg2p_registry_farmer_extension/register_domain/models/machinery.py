@@ -8,12 +8,6 @@ from openg2p_fastapi_common.models import BaseORMModel
 class G2PRegisterMachinery(G2PRegister):
     __tablename__ = "g2p_register_machineries"
 
-    # internal_record_id
-    # functional_record_id -> NONE
-    # foundational_id -> NONE
-    # link_foundational_id -> farmer's foundational_id
-    # link_internal_record_id -> farmer's internal_record_id
-    # master_register_id -> farmer register_id
     machinery_type: Mapped[str] = mapped_column(String, nullable=True)
     count: Mapped[int] = mapped_column(Integer, nullable=True)
     equipment_source: Mapped[str] = mapped_column(String, nullable=True)

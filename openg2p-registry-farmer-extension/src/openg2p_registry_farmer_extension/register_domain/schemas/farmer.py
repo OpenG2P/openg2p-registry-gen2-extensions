@@ -13,9 +13,6 @@ class G2PRegisterSchemaFarmer(G2PRegisterBaseSchema, G2PPersonSchema, G2PGeoSche
     """
     # Farmer-specific fields only
     is_disabled: Optional[bool] = None
-    address: Optional[str] = None
-    district: Optional[str] = None
-    region: Optional[str] = None
 
 
 class G2PRegisterHistorySchemaFarmer(G2PRegisterHistorySchema, G2PPersonSchema, G2PGeoSchema):
@@ -25,7 +22,4 @@ class G2PRegisterHistorySchemaFarmer(G2PRegisterHistorySchema, G2PPersonSchema, 
     """
     # Farmer-specific fields only
     is_disabled: Optional[bool] = None
-    address: Optional[str] = None
-    district: Optional[str] = None
-    region: Optional[str] = None
 
