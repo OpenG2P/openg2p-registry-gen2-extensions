@@ -6,7 +6,6 @@ from openg2p_registry_core.services import G2PRegisterDomainService
 
 _logger = logging.getLogger('g2p-register-domain-factory')
 
-from ..services import G2PRegisterDomainServiceFamily, G2PRegisterDomainServiceFamilyMember
 
 class G2PRegisterDomainFactory(BaseService):
 
@@ -15,7 +14,7 @@ class G2PRegisterDomainFactory(BaseService):
     def get_domain_service(self, register_mnemonic: str) -> Optional[G2PRegisterDomainService]:
         
         try:
-            module = importlib.import_module(f"openg2p_registry_family_extension.register_domain.services")
+            module = importlib.import_module(f"openg2p_registry_extensions.register_domain.services")
             register_class_prefix: str = "G2PRegisterDomainService"
             implementation_class_name: str = f"{register_class_prefix}{register_mnemonic}"
             implementation_class = getattr(module, implementation_class_name)
