@@ -1,7 +1,7 @@
 import logging
 
 from openg2p_registry_core.services import G2PRegisterDomainService
-from openg2p_registry_core.schemas.payload import ChangeRequestRequestPayload
+from openg2p_registry_core.schemas import ChangeRequestRequestPayload
 
 _logger = logging.getLogger('g2p-register-family-member-service')
 
