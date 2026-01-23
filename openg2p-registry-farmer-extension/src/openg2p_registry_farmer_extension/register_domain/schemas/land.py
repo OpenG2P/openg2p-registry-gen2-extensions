@@ -12,7 +12,6 @@ class G2PRegisterSchemaLand(G2PRegisterBaseSchema, G2PGeoSchema, G2PGeoShapeSche
     Inherits fields from G2PRegisterBaseSchema, G2PGeoSchema, and G2PGeoShapeSchema.
     """
     # Land-specific fields only
-    location: Optional[str] = None
     land_tenure: Optional[str] = None
     land_size: Optional[float] = None
     measurement: Optional[str] = None
@@ -24,7 +23,6 @@ class G2PRegisterHistorySchemaLand(G2PRegisterHistorySchema, G2PGeoSchema, G2PGe
     Inherits fields from G2PRegisterHistorySchema, G2PGeoSchema, and G2PGeoShapeSchema.
     """
     # Land-specific fields only
-    location: Optional[str] = None
     land_tenure: Optional[str] = None
     land_size: Optional[float] = None
     measurement: Optional[str] = None

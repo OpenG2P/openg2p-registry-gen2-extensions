@@ -16,7 +16,7 @@ from .register_domain.models import (
     G2PRegisterHistoryFamilyMember,
 )
 from .register_domain.factory import G2PRegisterDomainFactory
-from .register_domain.services import G2PRegisterFamilyDomainService, G2PRegisterFamilyMemberDomainService
+from .register_domain.services import G2PRegisterDomainServiceFamily, G2PRegisterDomainServiceFamilyMember
 
 _logger = logging.getLogger(_config.logging_default_logger_name)
 
@@ -26,8 +26,8 @@ class Initializer(BaseInitializer):
         super().initialize()
         CoreInitializer().initialize()
 
-        G2PRegisterFamilyDomainService()
-        G2PRegisterFamilyMemberDomainService()
+        G2PRegisterDomainServiceFamily()
+        G2PRegisterDomainServiceFamilyMember()
         G2PRegisterDomainFactory()
 
     def migrate_database(self, args):
