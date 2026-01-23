@@ -2,7 +2,7 @@ from typing import Optional
 
 from openg2p_registry_core.schemas import (
     G2PRegisterBaseSchema, G2PPersonSchema, G2PGeoSchema,
-    G2PRegisterHistorySchema
+    G2PRegisterHistorySchema, G2PPersonHistorySchema, G2PGeoHistorySchema
 )
 
 
@@ -11,15 +11,6 @@ class G2PRegisterSchemaFamilyMember(G2PRegisterBaseSchema, G2PPersonSchema, G2PG
     Schema for FamilyMember register.
     Inherits fields from G2PRegisterBaseSchema, G2PPersonSchema, and G2PGeoSchema.
     """
-    # Birthplace details
-    birth_place_name: Optional[str] = None
-    birth_place_lat: Optional[float] = None
-    birth_place_lng: Optional[float] = None
-
-    # Death details
-    death_date: Optional[str] = None
-    death_place: Optional[str] = None
-
     # Additional marital info
     marriage_date: Optional[str] = None
     divorce_date: Optional[str] = None
@@ -47,20 +38,11 @@ class G2PRegisterSchemaFamilyMember(G2PRegisterBaseSchema, G2PPersonSchema, G2PG
     is_malnourished_child: Optional[bool] = None
 
 
-class G2PRegisterHistorySchemaFamilyMember(G2PRegisterHistorySchema, G2PPersonSchema, G2PGeoSchema):
+class G2PRegisterHistorySchemaFamilyMember(G2PRegisterHistorySchema, G2PPersonHistorySchema, G2PGeoHistorySchema):
     """
     Schema for FamilyMember history.
-    Inherits fields from G2PRegisterHistorySchema, G2PPersonSchema, and G2PGeoSchema.
+    Inherits fields from G2PRegisterHistorySchema, G2PPersonHistorySchema, and G2PGeoHistorySchema.
     """
-    # Birthplace details
-    birth_place_name: Optional[str] = None
-    birth_place_lat: Optional[float] = None
-    birth_place_lng: Optional[float] = None
-
-    # Death details
-    death_date: Optional[str] = None
-    death_place: Optional[str] = None
-
     # Additional marital info
     marriage_date: Optional[str] = None
     divorce_date: Optional[str] = None
