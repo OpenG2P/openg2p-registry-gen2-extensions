@@ -2,7 +2,7 @@ from typing import Optional
 
 from openg2p_registry_core.schemas import (
     G2PRegisterBaseSchema, G2PGeoSchema, G2PGeoShapeSchema,
-    G2PRegisterHistorySchema
+    G2PRegisterHistorySchema, G2PGeoHistorySchema, G2PGeoShapeHistorySchema
 )
 
 
@@ -17,10 +17,10 @@ class G2PRegisterSchemaLand(G2PRegisterBaseSchema, G2PGeoSchema, G2PGeoShapeSche
     measurement: Optional[str] = None
 
 
-class G2PRegisterHistorySchemaLand(G2PRegisterHistorySchema, G2PGeoSchema, G2PGeoShapeSchema):
+class G2PRegisterHistorySchemaLand(G2PRegisterHistorySchema, G2PGeoHistorySchema, G2PGeoShapeHistorySchema):
     """
     Schema for Land history.
-    Inherits fields from G2PRegisterHistorySchema, G2PGeoSchema, and G2PGeoShapeSchema.
+    Inherits fields from G2PRegisterHistorySchema, G2PGeoHistorySchema, and G2PGeoShapeHistorySchema.
     """
     # Land-specific fields only
     land_tenure: Optional[str] = None
