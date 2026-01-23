@@ -1,7 +1,9 @@
-from sqlalchemy import String, Float, Date
+from sqlalchemy import String, Float
 from sqlalchemy.orm import Mapped, mapped_column
-from openg2p_registry_core.models import G2PRegister, G2PRegisterHistory, G2PGeo, G2PGeoShape
-from openg2p_fastapi_common.models import BaseORMModel
+from openg2p_registry_core.models import (
+    G2PRegister, G2PRegisterHistory, G2PGeo, G2PGeoShape,
+    G2PGeoHistory, G2PGeoShapeHistory
+)
 
 
 # All Register classes should have the prefix G2PRegister
@@ -25,10 +27,10 @@ class G2PRegisterLand(G2PRegister, G2PGeo, G2PGeoShape):
 
 
 # All Register History classes should have the prefix G2PRegisterHistory
-class G2PRegisterHistoryLand(G2PRegisterHistory):
+class G2PRegisterHistoryLand(G2PRegisterHistory, G2PGeoHistory, G2PGeoShapeHistory):
     __tablename__ = "g2p_register_history_lands"
 
-    # Override all columns from base to make them nullable for history
+    # Land-specific fields for history
     land_tenure: Mapped[str] = mapped_column(String, nullable=True)
     land_size: Mapped[float] = mapped_column(Float, nullable=True)
     measurement: Mapped[str] = mapped_column(String, nullable=True)

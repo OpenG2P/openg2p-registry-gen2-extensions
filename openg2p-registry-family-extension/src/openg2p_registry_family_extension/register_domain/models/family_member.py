@@ -1,9 +1,9 @@
-from sqlalchemy import String, Boolean, DateTime, Date, Float
+from sqlalchemy import String, Boolean
 from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy.dialects.postgresql import JSONB
-from openg2p_registry_core.models import G2PRegister, G2PRegisterHistory, G2PPerson, G2PGeo
-from openg2p_fastapi_common.models import BaseORMModel
-from datetime import datetime, date
+from openg2p_registry_core.models import (
+    G2PRegister, G2PRegisterHistory, G2PPerson, G2PGeo,
+    G2PPersonHistory, G2PGeoHistory
+)
 
 
 # All Register classes should have the prefix G2PRegister
@@ -42,35 +42,9 @@ class G2PRegisterFamilyMember(G2PRegister, G2PPerson, G2PGeo):
         G2PRegister, G2PPerson, and G2PGeo fields are automatically included via event listeners.
         """
         return [
-            # Name fields
-            self.surname or "",
-            self.second_name or "",
-            self.prefix or "",
-            self.suffix or "",
-            # Additional details
-            self.sex or "",
-            # Birthplace
-            self.birth_place_name or "",
-            str(self.birth_place_lat) if self.birth_place_lat is not None else "",
-            str(self.birth_place_lng) if self.birth_place_lng is not None else "",
-            # Death
-            self.death_date or "",
-            self.death_place or "",
-            # Address
-            self.address_line1 or "",
-            self.address_line2 or "",
-            self.locality or "",
-            self.sub_region_code or "",
-            self.region_code or "",
-            # Additional geo
-            str(self.geo_lat) if self.geo_lat is not None else "",
-            str(self.geo_lng) if self.geo_lng is not None else "",
             # Marital
             self.marriage_date or "",
             self.divorce_date or "",
-            # Contacts
-            str(self.phone_numbers) if self.phone_numbers else "",
-            str(self.emails) if self.emails else "",
             # Social Registry Commons
             self.employment_status or "",
             self.role_in_household or "",
@@ -94,56 +68,10 @@ class G2PRegisterFamilyMember(G2PRegister, G2PPerson, G2PGeo):
 
 
 # All Register History classes should have the prefix G2PRegisterHistory
-class G2PRegisterHistoryFamilyMember(G2PRegisterHistory):
+class G2PRegisterHistoryFamilyMember(G2PRegisterHistory, G2PPersonHistory, G2PGeoHistory):
     __tablename__ = "g2p_register_history_family_members"
 
-    # G2PPerson fields for history
-    foundational_id: Mapped[str] = mapped_column(String, nullable=True)
-    first_name: Mapped[str] = mapped_column(String, nullable=True)
-    middle_name: Mapped[str] = mapped_column(String, nullable=True)
-    last_name: Mapped[str] = mapped_column(String, nullable=True)
-    given_name: Mapped[str] = mapped_column(String, nullable=True)
-    gender: Mapped[str] = mapped_column(String, nullable=True)
-    birth_date: Mapped[str] = mapped_column(Date, nullable=True)
-    phone_number: Mapped[str] = mapped_column(String, nullable=True)
-    email_address: Mapped[str] = mapped_column(String, nullable=True)
-    marital_status: Mapped[str] = mapped_column(String, nullable=True)
-    occupation: Mapped[str] = mapped_column(String, nullable=True)
-    income_level: Mapped[str] = mapped_column(String, nullable=True)
-    language_code: Mapped[str] = mapped_column(String, nullable=True)
-    education_level: Mapped[str] = mapped_column(String, nullable=True)
-    registration_date: Mapped[str] = mapped_column(Date, nullable=True)
-
-    # G2PGeo fields for history
-    latitude: Mapped[float] = mapped_column(Float, nullable=True)
-    longitude: Mapped[float] = mapped_column(Float, nullable=True)
-    altitude: Mapped[float] = mapped_column(Float, nullable=True)
-    plus_code: Mapped[str] = mapped_column(String, nullable=True)
-    postal_code: Mapped[str] = mapped_column(String, nullable=True)
-    country_code: Mapped[str] = mapped_column(String, nullable=True)
-    geo_lowest_level_value_id: Mapped[str] = mapped_column(String, nullable=True)
-    geo_code_hierarchy_json: Mapped[str] = mapped_column(JSONB, nullable=True)
-
     # FamilyMember-specific fields for history
-    surname: Mapped[str] = mapped_column(String, nullable=True)
-    second_name: Mapped[str] = mapped_column(String, nullable=True)
-    prefix: Mapped[str] = mapped_column(String, nullable=True)
-    suffix: Mapped[str] = mapped_column(String, nullable=True)
-    phone_numbers: Mapped[list] = mapped_column(JSONB, nullable=True)
-    emails: Mapped[list] = mapped_column(JSONB, nullable=True)
-    sex: Mapped[str] = mapped_column(String, nullable=True)
-    birth_place_name: Mapped[str] = mapped_column(String, nullable=True)
-    birth_place_lat: Mapped[float] = mapped_column(Float, nullable=True)
-    birth_place_lng: Mapped[float] = mapped_column(Float, nullable=True)
-    death_date: Mapped[str] = mapped_column(String, nullable=True)
-    death_place: Mapped[str] = mapped_column(String, nullable=True)
-    address_line1: Mapped[str] = mapped_column(String, nullable=True)
-    address_line2: Mapped[str] = mapped_column(String, nullable=True)
-    locality: Mapped[str] = mapped_column(String, nullable=True)
-    sub_region_code: Mapped[str] = mapped_column(String, nullable=True)
-    region_code: Mapped[str] = mapped_column(String, nullable=True)
-    geo_lat: Mapped[float] = mapped_column(Float, nullable=True)
-    geo_lng: Mapped[float] = mapped_column(Float, nullable=True)
     marriage_date: Mapped[str] = mapped_column(String, nullable=True)
     divorce_date: Mapped[str] = mapped_column(String, nullable=True)
 
