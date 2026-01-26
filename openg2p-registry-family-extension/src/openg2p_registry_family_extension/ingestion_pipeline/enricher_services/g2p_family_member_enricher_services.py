@@ -1,8 +1,10 @@
 import logging
 from typing import Dict
+from datetime import datetime
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 from openg2p_registry_core.interfaces import G2PPayloadEnricherInterface
+from openg2p_registry_core.models import MaritalStatusEnum
 from openg2p_registry_extensions.register_domain.models import G2PRegisterFamilyMember
 
 
@@ -49,6 +51,53 @@ class G2PDciFamilyMemberCreateEnricherService(G2PPayloadEnricherInterface):
         else:
             _logger.warning("Could not find a parent family member using either parent1_identifier or parent2_identifier.")
             data["link_internal_record_id"] = None
+        
+        # Normalize and map marital_status values to G2P standard values.
+        marital_status_mapping = {
+            "s": MaritalStatusEnum.SINGLE.value,
+            "u": MaritalStatusEnum.SINGLE.value,
+            "m": MaritalStatusEnum.MARRIED.value,
+            "w": MaritalStatusEnum.WIDOWED.value,
+            "d": MaritalStatusEnum.DIVORCED.value,
+            "a": MaritalStatusEnum.SEPARATED.value,
+            "l": MaritalStatusEnum.SEPARATED.value,
+            "widow": MaritalStatusEnum.WIDOWED.value,
+            "married": MaritalStatusEnum.MARRIED.value,
+            "unmarried": MaritalStatusEnum.SINGLE.value,
+            "divorced": MaritalStatusEnum.DIVORCED.value,
+            "annulled": MaritalStatusEnum.SEPARATED.value,
+            "never married": MaritalStatusEnum.SINGLE.value,
+            "legally separated": MaritalStatusEnum.SEPARATED.value,
+        }
+
+        marital_status = data.get("marital_status")
+        if isinstance(marital_status, str):
+            marital_status_normalized = marital_status.strip().lower()
+            g2p_value = marital_status_mapping.get(marital_status_normalized)
+            # Also support single-letter codes mapped from uppercase (e.g. "S", "W", etc.)
+            if g2p_value:
+                data["marital_status"] = g2p_value
+            else:
+                # If mapping fails, set as "UNKNOWN"
+                data["marital_status"] = MaritalStatusEnum.UNKNOWN.value
+                
+        # Transform birth_date and death_date to only Date (YYYY-MM-DD), removing time component if present.
+        for date_field in ["birth_date", "death_date"]:
+            value = data.get(date_field)
+            if isinstance(value, str) and value.strip():
+                # Handle cases like "YYYY-MM-DDTHH:MM:SS" or "YYYY-MM-DD"
+                try:
+                    if "T" in value:
+                        date_str = value.split("T")[0]
+                    else:
+                        date_str = value
+
+                    parsed_date = datetime.strptime(date_str, "%Y-%m-%d")
+                    # Set as "YYYY-MM-DD"
+                    data[date_field] = parsed_date.strftime("%Y-%m-%d")
+                except Exception as e:
+                    # If parsing fails, leave the original value or set to None
+                    _logger.warning(f"Could not parse {date_field}: {value} ({str(e)})")
 
         return data
 
