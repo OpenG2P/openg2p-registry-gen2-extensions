@@ -19,18 +19,22 @@ import os
 import sys
 from pathlib import Path
 
-# Add local src directory to Python path for local development
+# Add local src directories to Python path for local development
 SCRIPT_DIR = Path(__file__).resolve().parent
 SRC_DIR = SCRIPT_DIR / "src"
+CORE_SRC_DIR = SCRIPT_DIR.parent.parent / "openg2p-registry-gen2" / "openg2p-registry-core" / "src"
+
+if CORE_SRC_DIR.exists():
+    sys.path.insert(0, str(CORE_SRC_DIR))
 if SRC_DIR.exists():
     sys.path.insert(0, str(SRC_DIR))
 
 # Database configuration - Update these values for your environment
 DB_DRIVER = "postgresql+asyncpg"
 DB_USERNAME = "postgres"
-DB_PASSWORD = "Rb1hjf85GW"
+DB_PASSWORD = "password"
 DB_HOSTNAME = "localhost"
-DB_PORT = "5435"
+DB_PORT = "5436"
 DB_DBNAME = "registry-gen2-family_db"
 
 # Set environment variables for ALL possible prefixes used by different modules
@@ -108,8 +112,8 @@ class FamilyRegisterSeeder:
     ELECTRICITY_ACCESS = ["Grid Connected", "Solar", "Generator", "None"]
     ETHNIC_GROUPS = ["Group A", "Group B", "Group C", "Group D", "Group E"]
 
-    GENDERS = ["Male", "Female", "Other"]
-    MARITAL_STATUSES = ["Single", "Married", "Widowed", "Divorced", "Separated"]
+    GENDERS = ["MALE", "FEMALE"]
+    MARITAL_STATUSES = ["SINGLE", "MARRIED", "WIDOWED", "DIVORCED", "SEPARATED"]
     EDUCATION_LEVELS = ["No Education", "Primary", "Secondary", "Higher Secondary", "Graduate", "Post Graduate"]
     EMPLOYMENT_STATUSES = ["Employed", "Unemployed", "Self-Employed", "Student", "Homemaker", "Retired"]
     RELATIONSHIPS = ["Head", "Spouse", "Child", "Parent", "Sibling", "Other Relative", "Non-Relative"]
@@ -117,6 +121,9 @@ class FamilyRegisterSeeder:
     INCOME_SOURCES = ["Salary", "Business", "Agriculture", "Pension", "Remittance", "Other"]
     INCOME_LEVELS = ["Low", "Medium", "High"]
     LAND_TYPES = ["Agricultural", "Residential", "Commercial", "Mixed"]
+    OCCUPATIONS = ["Farmer", "Laborer", "Trader", "Student", "Homemaker", "Teacher", "Carpenter"]
+    LANGUAGE_CODES = ["en", "hi", "ta", "te", "kn", "ml", "mr", "gu", "bn"]
+    COUNTRY_CODES = ["IN"]
 
     def __init__(self):
         self.engine = create_async_engine(DATABASE_URL, echo=False)
@@ -152,16 +159,25 @@ class FamilyRegisterSeeder:
         """Generate unique family ID"""
         return f"FAMILY-{uuid.uuid4().hex[:8].upper()}"
 
-    def generate_random_date_of_birth(self, min_age: int = 0, max_age: int = 80) -> str:
-        """Generate random date of birth as string"""
+    def generate_random_birth_date(self, min_age: int = 0, max_age: int = 80) -> date:
+        """Generate random birth date"""
         days_back = random.randint(min_age * 365, max_age * 365)
-        birth_date = date.today() - timedelta(days=days_back)
-        return birth_date.isoformat()
+        return date.today() - timedelta(days=days_back)
+
+    def generate_geo_coordinates(self) -> tuple[str, str, str]:
+        """Generate random geo coordinates for India region (as strings for DB)"""
+        latitude = str(round(random.uniform(8.0, 35.0), 6))
+        longitude = str(round(random.uniform(68.0, 97.0), 6))
+        altitude = str(round(random.uniform(0, 2000), 2))
+        return latitude, longitude, altitude
+
+    def generate_plus_code(self, lat: str, lng: str) -> str:
+        """Generate a simple plus code approximation"""
+        return f"{int(float(lat)*100):04d}+{int(float(lng)*100):04d}"
 
     def create_family(self) -> G2PRegisterFamily:
         """Create a single family record"""
         family_name = random.choice(self.FAMILY_NAMES)
-        location = self.get_random_location()
 
         family = G2PRegisterFamily(
             internal_record_id=str(uuid.uuid4()),
@@ -176,8 +192,6 @@ class FamilyRegisterSeeder:
             ethnic_group=random.choice(self.ETHNIC_GROUPS),
             belong_to_protected_groups=random.choice([True, False]),
             under_other_vulnerable_status=random.choice([True, False]),
-            administrative_area_small_id=location['admin2Pcode'],
-            administrative_area_large_id=location['admin1Pcode'],
             created_by=self.system_user,
             created_at=self.now,
             last_approved_at=self.now,
@@ -186,73 +200,85 @@ class FamilyRegisterSeeder:
         return family
 
     def create_family_members(self, family: G2PRegisterFamily, count: int) -> list:
-        """Create family members"""
+        """Create family members with G2PPerson and G2PGeo fields"""
         members = []
         head_created = False
         
         for i in range(count):
-            given_name = random.choice(self.FIRST_NAMES)
-            surname = random.choice(self.LAST_NAMES)
-            is_head = not head_created and (i == 0 or random.choice([True, False]))
+            first_name = random.choice(self.FIRST_NAMES)
+            last_name = random.choice(self.LAST_NAMES)
+            gender = random.choice(self.GENDERS)
+            
+            is_head = not head_created and i == 0
             if is_head:
                 head_created = True
+                relationship = "Head"
+                role = "Head"
+            else:
+                relationship = random.choice(["Spouse", "Child", "Parent", "Sibling", "Other Relative"])
+                role = random.choice(["Member", "Dependent"])
 
-            # Generate phone numbers and emails as JSON arrays
-            phone_numbers = [f"+91{random.randint(6000000000, 9999999999)}"]
-            if random.choice([True, False]):
-                phone_numbers.append(f"+91{random.randint(6000000000, 9999999999)}")
-            
-            emails = [f"{given_name.lower()}.{surname.lower()}@family.local"]
-            if random.choice([True, False]):
-                emails.append(f"{given_name.lower()}{random.randint(1, 99)}@family.local")
-
+            # Generate geo coordinates
+            lat, lng, alt = self.generate_geo_coordinates()
             location = self.get_random_location()
-            birth_date = self.generate_random_date_of_birth(min_age=0, max_age=80)
-            identifier_value = f"UIN-{random.randint(100000000, 999999999)}"
             
             member = G2PRegisterFamilyMember(
                 internal_record_id=str(uuid.uuid4()),
                 functional_record_id=f"FAM-MEM-{uuid.uuid4().hex[:8].upper()}",
-                record_name=f"{given_name} {surname}",
+                record_name=f"{first_name} {last_name}",
                 link_internal_record_id=family.internal_record_id,
-                foundational_id=identifier_value,  # foundational_id -> national_id
-                # identifier_type="National ID",
-                # identifier_value=identifier_value,
-                surname=surname,
-                given_name=given_name,
-                second_name=random.choice(self.FIRST_NAMES) if random.choice([True, False]) else None,
-                prefix="Mr." if random.choice([True, False]) else "Ms.",
+                
+                # G2PPerson fields
+                foundational_id=f"UIN-{random.randint(100000000, 999999999)}",
+                first_name=first_name,
+                middle_name=random.choice(self.FIRST_NAMES) if random.random() > 0.7 else None,
+                last_name=last_name,
+                given_name=first_name,
+                prefix="Mr." if gender == "MALE" else "Ms.",
                 suffix="",
-                phone_numbers=phone_numbers,
-                emails=emails,
-                sex=random.choice(self.GENDERS),
-                birth_date=birth_date,
-                birth_place_name=f"{location['admin2Name']}, {location['admin1Name']}",
-                birth_place_lat=round(random.uniform(8.0, 37.0), 6),
-                birth_place_lng=round(random.uniform(68.0, 97.0), 6),
-                death_date=None,
-                death_place=None,
-                address_line1=f"{random.randint(1, 999)} {random.choice(['Main', 'Village', 'Street'])} Road",
-                address_line2=random.choice(["Apt 101", "Block A", "Unit 5", None]),
-                locality=location['admin2Name'],
-                sub_region_code=location['admin2Pcode'],
-                region_code=location['admin1Pcode'],
-                postal_code=f"{random.randint(100000, 999999)}",
-                country_code="FAR",
-                plus_code=None,
-                geo_lat=round(random.uniform(8.0, 37.0), 6),
-                geo_lng=round(random.uniform(68.0, 97.0), 6),
-                administrative_area_small_id=location['admin2Pcode'],
-                administrative_area_large_id=location['admin1Pcode'],
+                gender=gender,
+                birth_date=self.generate_random_birth_date(min_age=0, max_age=80),
+                phone_numbers=[{
+                    "type": "mobile",
+                    "number": f"+91{random.randint(6000000000, 9999999999)}",
+                    "is_primary": True
+                }],
+                emails=[{
+                    "type": "personal",
+                    "address": f"{first_name.lower()}.{last_name.lower()}@family.local",
+                    "is_primary": True
+                }],
                 marital_status=random.choice(self.MARITAL_STATUSES),
-                marriage_date=self.generate_random_date_of_birth(min_age=18, max_age=50) if random.choice([True, False]) else None,
-                divorce_date=None,
-                # parent1_identifier_value=f"ID-{random.randint(100000000, 999999999)}" if random.choice([True, False]) else None,
-                # parent2_identifier_value=f"ID-{random.randint(100000000, 999999999)}" if random.choice([True, False]) else None,
+                occupation=random.choice(self.OCCUPATIONS),
+                income_level=random.choice(self.INCOME_LEVELS),
+                language_code=random.choice(self.LANGUAGE_CODES),
                 education_level=random.choice(self.EDUCATION_LEVELS),
+                registration_date=date.today(),
+                
+                # G2PGeo fields
+                latitude=lat,
+                longitude=lng,
+                altitude=alt,
+                plus_code=self.generate_plus_code(lat, lng),
+                address_line_1=f"{random.randint(1, 999)} {random.choice(['Main', 'Village', 'Street'])} Road",
+                address_line_2=location['admin2Name'],
+                postal_code=f"{random.randint(100000, 999999)}",
+                country_code=random.choice(self.COUNTRY_CODES),
+                # Note: Not setting geo_lowest_level_value_id to avoid triggering service call
+                geo_code_hierarchy_json={
+                    "lowest_level_value_id": location['admin2Pcode'],
+                    "hierarchy": [
+                        {"level": "admin1", "level_value_mnemonic": location['admin1Name'], "level_value_id": location['admin1Pcode']},
+                        {"level": "admin2", "level_value_mnemonic": location['admin2Name'], "level_value_id": location['admin2Pcode']}
+                    ]
+                },
+                
+                # FamilyMember-specific fields
+                marriage_date=self.generate_random_birth_date(min_age=18, max_age=50).isoformat() if random.random() > 0.5 else None,
+                divorce_date=None,
                 employment_status=random.choice(self.EMPLOYMENT_STATUSES),
-                role_in_household=random.choice(self.ROLES),
-                relationship_with_household_head=random.choice(self.RELATIONSHIPS),
+                role_in_household=role,
+                relationship_with_household_head=relationship,
                 sources_of_income=random.choice(self.INCOME_SOURCES),
                 annual_income=random.choice(self.INCOME_LEVELS),
                 owns_a_two_wheeler=random.choice([True, False]),
@@ -260,14 +286,16 @@ class FamilyRegisterSeeder:
                 owns_a_four_wheeler=random.choice([True, False]),
                 owns_a_cart=random.choice([True, False]),
                 land_ownership=random.choice([True, False]),
-                type_of_land_owned=random.choice(self.LAND_TYPES) if random.choice([True, False]) else None,
-                land_size=f"{random.randint(1, 50)}" if random.choice([True, False]) else None,
+                type_of_land_owned=random.choice(self.LAND_TYPES) if random.random() > 0.5 else None,
+                land_size=f"{random.randint(1, 50)}" if random.random() > 0.5 else None,
                 owns_house=random.choice([True, False]),
                 owns_livestock=random.choice([True, False]),
                 is_head=is_head,
-                is_disabled=random.choice([True, False]),
-                is_pregnant_and_lactating=random.choice([True, False]) if random.choice([True, False]) else False,
-                is_malnourished_child=random.choice([True, False]) if random.choice([True, False]) else False,
+                is_disabled=random.choice([True, False, False, False]),  # 25% chance
+                is_pregnant_and_lactating=random.choice([True, False, False]) if gender == "FEMALE" else False,
+                is_malnourished_child=random.choice([True, False, False, False, False]),  # 20% chance
+                
+                # Audit fields
                 created_by=self.system_user,
                 created_at=self.now,
                 last_approved_at=self.now,
@@ -302,22 +330,22 @@ class FamilyRegisterSeeder:
         """Get schema configuration for Family Member register"""
         return {
             'search_result_schema': [
-                {"field_name": "given_name", "display_label": "Given Name", "order": 1},
-                {"field_name": "surname", "display_label": "Surname", "order": 2},
-                {"field_name": "sex", "display_label": "Sex", "order": 3},
+                {"field_name": "first_name", "display_label": "First Name", "order": 1},
+                {"field_name": "last_name", "display_label": "Last Name", "order": 2},
+                {"field_name": "gender", "display_label": "Gender", "order": 3},
                 {"field_name": "birth_date", "display_label": "Birth Date", "order": 4},
                 {"field_name": "relationship_with_household_head", "display_label": "Relationship", "order": 5}
             ],
             'filter_schema': [
-                {"field_name": "given_name", "display_label": "Given Name", "filter_type": "text", "order": 1, "allowed_operators": ["eq", "contains"]},
-                {"field_name": "surname", "display_label": "Surname", "filter_type": "text", "order": 2, "allowed_operators": ["eq", "contains"]},
-                {"field_name": "sex", "display_label": "Sex", "filter_type": "dropdown", "order": 3, "allowed_operators": ["eq", "in"], "options_source": "distinct"},
+                {"field_name": "first_name", "display_label": "First Name", "filter_type": "text", "order": 1, "allowed_operators": ["eq", "contains"]},
+                {"field_name": "last_name", "display_label": "Last Name", "filter_type": "text", "order": 2, "allowed_operators": ["eq", "contains"]},
+                {"field_name": "gender", "display_label": "Gender", "filter_type": "dropdown", "order": 3, "allowed_operators": ["eq", "in"], "options_source": "distinct"},
                 {"field_name": "relationship_with_household_head", "display_label": "Relationship", "filter_type": "dropdown", "order": 4, "allowed_operators": ["eq", "in"], "options_source": "distinct"},
                 {"field_name": "education_level", "display_label": "Education Level", "filter_type": "dropdown", "order": 5, "allowed_operators": ["eq", "in"], "options_source": "distinct"}
             ],
             'deduplicate_schema': [
-                {"field_name": "given_name", "match_type": "fuzzy", "weight": 0.3},
-                {"field_name": "surname", "match_type": "fuzzy", "weight": 0.3},
+                {"field_name": "first_name", "match_type": "fuzzy", "weight": 0.3},
+                {"field_name": "last_name", "match_type": "fuzzy", "weight": 0.3},
                 {"field_name": "birth_date", "match_type": "exact", "weight": 0.4}
             ]
         }
@@ -429,6 +457,28 @@ class FamilyRegisterSeeder:
                 return False
 
 
+async def create_search_text_indexes(engine):
+    """Create trigram indexes on search_text columns for full-text search"""
+    from sqlalchemy import text
+    
+    tables = [
+        G2PRegisterFamily.__tablename__,
+        G2PRegisterFamilyMember.__tablename__,
+    ]
+    
+    async with engine.begin() as conn:
+        # Ensure pg_trgm extension exists
+        await conn.execute(text("CREATE EXTENSION IF NOT EXISTS pg_trgm"))
+        
+        for table in tables:
+            index_name = f"idx_{table}_search_text_trigram"
+            # Use IF NOT EXISTS to avoid errors if index already exists
+            await conn.execute(text(
+                f'CREATE INDEX IF NOT EXISTS {index_name} ON {table} USING gin (search_text gin_trgm_ops)'
+            ))
+            print(f"  ✓ Created index {index_name}")
+
+
 async def main():
     """Main entry point"""
     # First, ensure migrations are run
@@ -444,6 +494,19 @@ async def main():
         import traceback
         traceback.print_exc()
         exit(1)
+
+    # Create search_text indexes
+    print("Creating search_text trigram indexes...")
+    try:
+        from sqlalchemy.ext.asyncio import create_async_engine
+        engine = create_async_engine(DB_URL)
+        await create_search_text_indexes(engine)
+        await engine.dispose()
+        print("✓ Indexes created\n")
+    except Exception as e:
+        print(f"✗ Index creation error: {str(e)}")
+        import traceback
+        traceback.print_exc()
 
     # Now run the seeder
     seeder = FamilyRegisterSeeder()

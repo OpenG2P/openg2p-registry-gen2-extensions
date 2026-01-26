@@ -206,3 +206,4 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 openg2p-registry-farmer-extension/farmer_register_seeder.py
+openg2p-registry-family-extension/family_register_seeder.py

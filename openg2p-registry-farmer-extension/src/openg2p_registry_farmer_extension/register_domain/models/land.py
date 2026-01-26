@@ -11,7 +11,7 @@ class G2PRegisterLand(G2PRegister, G2PGeo, G2PGeoShape):
     __tablename__ = "g2p_register_lands"
     
     land_tenure: Mapped[str] = mapped_column(String, nullable=True)
-    land_size: Mapped[float] = mapped_column(Float, nullable=True)
+    land_size: Mapped[str] = mapped_column(String, nullable=True)
     measurement: Mapped[str] = mapped_column(String, nullable=True)
 
     def get_search_text_fields(self) -> list[str]:
@@ -32,5 +32,5 @@ class G2PRegisterHistoryLand(G2PRegisterHistory, G2PGeoHistory, G2PGeoShapeHisto
 
     # Land-specific fields for history
     land_tenure: Mapped[str] = mapped_column(String, nullable=True)
-    land_size: Mapped[float] = mapped_column(Float, nullable=True)
+    land_size: Mapped[str] = mapped_column(String, nullable=True)
     measurement: Mapped[str] = mapped_column(String, nullable=True)

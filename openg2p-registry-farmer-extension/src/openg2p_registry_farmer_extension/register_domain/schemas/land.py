@@ -13,7 +13,7 @@ class G2PRegisterSchemaLand(G2PRegisterBaseSchema, G2PGeoSchema, G2PGeoShapeSche
     """
     # Land-specific fields only
     land_tenure: Optional[str] = None
-    land_size: Optional[float] = None
+    land_size: Optional[str] = None
     measurement: Optional[str] = None
 
 
@@ -24,6 +24,6 @@ class G2PRegisterHistorySchemaLand(G2PRegisterHistorySchema, G2PGeoHistorySchema
     """
     # Land-specific fields only
     land_tenure: Optional[str] = None
-    land_size: Optional[float] = None
+    land_size: Optional[str] = None
     measurement: Optional[str] = None
 

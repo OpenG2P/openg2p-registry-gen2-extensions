@@ -7,7 +7,7 @@ from openg2p_registry_core.models import G2PRegister, G2PRegisterHistory, G2PGeo
 class G2PRegisterHousehold(G2PRegister, G2PGeo):
     __tablename__ = "g2p_register_households"
 
-    poverty_score: Mapped[float] = mapped_column(Float, nullable=True)
+    poverty_score: Mapped[str] = mapped_column(String, nullable=True)
     poverty_score_type: Mapped[str] = mapped_column(String, nullable=True)
     household_head: Mapped[str] = mapped_column(String, nullable=True)
 
@@ -28,7 +28,7 @@ class G2PRegisterHistoryHousehold(G2PRegisterHistory, G2PGeoHistory):
     __tablename__ = "g2p_register_history_households"
 
     # Household-specific fields for history
-    poverty_score: Mapped[float] = mapped_column(Float, nullable=True)
+    poverty_score: Mapped[str] = mapped_column(String, nullable=True)
     poverty_score_type: Mapped[str] = mapped_column(String, nullable=True)
     household_head: Mapped[str] = mapped_column(String, nullable=True)
 
