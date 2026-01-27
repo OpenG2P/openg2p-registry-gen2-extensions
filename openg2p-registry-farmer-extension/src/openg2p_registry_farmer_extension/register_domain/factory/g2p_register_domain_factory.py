@@ -20,6 +20,8 @@ class G2PRegisterDomainFactory(BaseService):
             implementation_class = getattr(module, implementation_class_name)
             _logger.info(f"Found specific implementation for register mnemonic '{register_mnemonic}': {implementation_class_name}")
             g2p_register_domain_service: G2PRegisterDomainService = implementation_class.get_component()
+            if not g2p_register_domain_service:
+                g2p_register_domain_service = implementation_class()
             return g2p_register_domain_service
         except (AttributeError, ModuleNotFoundError) as error:
             _logger.warning(f"Could not find specific implementation for register mnemonic '{register_mnemonic}': {error}. Falling back to default implementations.")
