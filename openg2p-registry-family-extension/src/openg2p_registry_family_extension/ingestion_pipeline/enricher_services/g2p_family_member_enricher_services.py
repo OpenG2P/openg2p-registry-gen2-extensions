@@ -4,7 +4,7 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 from openg2p_registry_core.interfaces import G2PPayloadEnricherInterface
-from openg2p_registry_core.models import MaritalStatusEnum
+from openg2p_registry_core.models import MaritalStatusEnum, GenderEnum
 from openg2p_registry_extensions.register_domain.models import G2PRegisterFamilyMember
 
 
@@ -117,9 +117,18 @@ class G2PDciVcFamilyMemberCreateEnricherService(G2PPayloadEnricherInterface):
 
         parent_link_internal_record_id = None
 
-        parents = data.get('parent')
-        if isinstance(parents, list):
-            for parent in parents:
+        jwt_payload = data.get('jwt', {}).get('payload', {})
+
+        # parents data: jwt.payload.parent
+        parents_data = jwt_payload.get('parents')
+            
+        if isinstance(parents_data, dict):
+            parents_data = [parents_data]
+        elif not isinstance(parents_data, list):
+            parents_data = []
+
+        for parent in parents_data:
+            if isinstance(parent, dict):
                 identifier_value = parent.get('identifier')
                 if identifier_value:
                     _logger.debug(f"Checking for parent family member with identifier: {identifier_value}")
@@ -130,8 +139,11 @@ class G2PDciVcFamilyMemberCreateEnricherService(G2PPayloadEnricherInterface):
                     if parent_family_member:
                         parent_link_internal_record_id = parent_family_member.link_internal_record_id
                         _logger.info(f"Found parent family member via identifier. Link record ID: {parent_link_internal_record_id}")
-                        data['link_internal_record_id'] = parent_link_internal_record_id
                         break
+        
+        if parent_link_internal_record_id:
+            data['link_internal_record_id'] = parent_link_internal_record_id
+
         return data
 
 class G2PDciVcFamilyMemberUpdateEnricherService(G2PPayloadEnricherInterface):
