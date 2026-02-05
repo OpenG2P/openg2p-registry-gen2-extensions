@@ -21,6 +21,9 @@ class G2PRegisterFamily(G2PRegister):
     belong_to_protected_groups: Mapped[bool] = mapped_column(Boolean, nullable=True)
     under_other_vulnerable_status: Mapped[bool] = mapped_column(Boolean, nullable=True)
 
+    # Addl fields
+    no_of_children: Mapped[int] = mapped_column(Integer, nullable=True)     # family members under the age of 15
+
     def get_search_text_fields(self) -> list[str]:
         """
         Return family-specific fields for search text aggregation.
@@ -52,3 +55,6 @@ class G2PRegisterHistoryFamily(G2PRegisterHistory):
     ethnic_group: Mapped[str] = mapped_column(String, nullable=True)
     belong_to_protected_groups: Mapped[bool] = mapped_column(Boolean, nullable=True)
     under_other_vulnerable_status: Mapped[bool] = mapped_column(Boolean, nullable=True)
+
+    # Addl fields
+    no_of_children: Mapped[int] = mapped_column(Integer, nullable=True)     # family members under the age of 15
