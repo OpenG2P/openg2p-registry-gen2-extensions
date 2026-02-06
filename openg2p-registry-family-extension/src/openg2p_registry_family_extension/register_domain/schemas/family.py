@@ -19,6 +19,9 @@ class G2PRegisterSchemaFamily(G2PRegisterBaseSchema):
     belong_to_protected_groups: Optional[bool] = None
     under_other_vulnerable_status: Optional[bool] = None
 
+    # Addl fields
+    no_of_children: Optional[int] = None
+
 
 class G2PRegisterHistorySchemaFamily(G2PRegisterHistorySchema):
     """
@@ -35,3 +38,6 @@ class G2PRegisterHistorySchemaFamily(G2PRegisterHistorySchema):
     ethnic_group: Optional[str] = None
     belong_to_protected_groups: Optional[bool] = None
     under_other_vulnerable_status: Optional[bool] = None
+
+    # Addl fields
+    no_of_children: Optional[int] = None
