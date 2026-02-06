@@ -14,9 +14,6 @@ class G2PRegisterDomainServiceFamilyMember(G2PRegisterDomainService):
     async def validate_domain_attributes(self, change_request_request_payload: ChangeRequestRequestPayload):
         _logger.info("Validating family member domain attributes")
         return
-    
-    async def pre_approve(self):
-        pass
 
     async def post_approve(self, change_request: G2PRegisterChangeRequest, session: AsyncSession):
 
