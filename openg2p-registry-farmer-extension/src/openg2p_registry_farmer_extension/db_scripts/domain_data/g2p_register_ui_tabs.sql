@@ -1,0 +1,15 @@
+INSERT INTO "public"."g2p_register_ui_tabs" ("tab_id","register_id","tab_label","tab_order","used_for_new_intake_form","no_of_verifications_required","intake_form_name","intake_form_description","intake_form_auto_approve","is_active") VALUES
+('220a513b-9167-4d95-b1b2-53fadc63f451', '721fa517-9281-4e98-8b2d-7f63242599da', 'personal',1,FALSE,0,NULL,NULL,FALSE,TRUE),
+('829c24ff-5f95-4a2a-9e9b-a25d9d8e55da', 'e3bf855d-045e-4514-bbe5-7f14d456762b', 'test_tab',1,FALSE,0,NULL,NULL,FALSE,TRUE),
+('88556b88-d6a4-4dd9-8efb-dfc615bc92a9', 'd164d067-028e-4950-9116-373ec39406d7', 'tab1',1,FALSE,0,NULL,NULL,FALSE,TRUE),
+('8ea43be8-0801-40d7-b717-222dc797335f', '721fa517-9281-4e98-8b2d-7f63242599da', 'mandatory',2,FALSE,0,NULL,NULL,FALSE,TRUE),
+('c0ac63f4-e67e-4b7f-b042-7d23d5606abe', 'd7a4149c-5ddf-46e6-ad15-f4ab0a761b8f', 'test_form',23,FALSE,0,NULL,NULL,FALSE,TRUE),
+('df2c49c2-0677-4a3a-b046-c0dfc471350c', 'd164d067-028e-4950-9116-373ec39406d7', 'tab2',0,FALSE,0,NULL,NULL,FALSE,TRUE),
+('ed724a1a-e097-45f3-9a3e-bed693ff977d', '6428deca-575d-41f0-b022-a0d79f1495f4', 'farmer',1,FALSE,0,NULL,NULL,FALSE,TRUE),
+('farmer_crop_tab', '6428deca-575d-41f0-b022-a0d79f1495f4', 'crop',4,FALSE,0,NULL,NULL,FALSE,TRUE),
+('farmer_household_tab', '6428deca-575d-41f0-b022-a0d79f1495f4', 'household',2,FALSE,0,NULL,NULL,FALSE,TRUE),
+('farmer_land_tab', '6428deca-575d-41f0-b022-a0d79f1495f4', 'land',3,FALSE,0,NULL,NULL,FALSE,TRUE),
+('farmer_livestock_tab', '6428deca-575d-41f0-b022-a0d79f1495f4', 'livestock',5,FALSE,0,NULL,NULL,FALSE,TRUE),
+('farmer_machinery_tab', '6428deca-575d-41f0-b022-a0d79f1495f4', 'machinery',6,FALSE,0,NULL,NULL,FALSE,TRUE),
+('household_farmer_tab', '49525ce4-d814-463c-9bbd-4582caf1b3ad', 'farmer',2,FALSE,0,NULL,NULL,FALSE,TRUE),
+('household_household_tab', '49525ce4-d814-463c-9bbd-4582caf1b3ad', 'household',1,FALSE,0,NULL,NULL,FALSE,TRUE);
