@@ -12,4 +12,7 @@ INSERT INTO "public"."g2p_register_ui_tabs" ("tab_id","register_id","tab_label",
 ('farmer_livestock_tab', '6428deca-575d-41f0-b022-a0d79f1495f4', 'livestock',5,FALSE,0,NULL,NULL,FALSE,TRUE),
 ('farmer_machinery_tab', '6428deca-575d-41f0-b022-a0d79f1495f4', 'machinery',6,FALSE,0,NULL,NULL,FALSE,TRUE),
 ('household_farmer_tab', '49525ce4-d814-463c-9bbd-4582caf1b3ad', 'farmer',2,FALSE,0,NULL,NULL,FALSE,TRUE),
-('household_household_tab', '49525ce4-d814-463c-9bbd-4582caf1b3ad', 'household',1,FALSE,0,NULL,NULL,FALSE,TRUE);
+('household_household_tab', '49525ce4-d814-463c-9bbd-4582caf1b3ad', 'household',1,FALSE,0,NULL,NULL,FALSE,TRUE),
+('intake_form_tab_1', '6428deca-575d-41f0-b022-a0d79f1495f4', 'intake1',7,TRUE,0,'IntakeForm1','Intake-Form-1-Description',TRUE,TRUE),
+('intake_form_tab_2', '6428deca-575d-41f0-b022-a0d79f1495f4', 'intake2',8,TRUE,0,'IntakeForm2','Intake-Form-2-Description',TRUE,TRUE),
+('intake_form_tab_3', '6428deca-575d-41f0-b022-a0d79f1495f4', 'intake3',9,TRUE,0,'IntakeForm3','Intake-Form-3-Description',FALSE,TRUE);
