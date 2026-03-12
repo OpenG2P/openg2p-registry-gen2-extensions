@@ -41,6 +41,13 @@ class G2PRegisterCrop(G2PRegister):
             self.fertilizer_type or "",
         ]
 
+    def get_record_name_fields(self) -> list[str]:
+        """Return crop fields used to build record_name."""
+        return [
+            self.crop_type or "",
+            self.functional_record_id or "",
+        ]
+
 # All Register History classes should have the prefix G2PRegisterHistory
 class G2PRegisterHistoryCrop(G2PRegisterHistory):
     __tablename__ = "g2p_register_history_crops"

@@ -21,6 +21,13 @@ class G2PRegisterHouseholdMember(G2PRegister, G2PPerson, G2PGeo):
             str(self.is_disabled) if self.is_disabled is not None else "",
         ]
 
+    def get_record_name_fields(self) -> list[str]:
+        """Return household member fields used to build record_name."""
+        return [
+            self.first_name or "",
+            self.last_name or "",
+        ]
+
 
 # All Register History classes should have the prefix G2PRegisterHistory
 class G2PRegisterHistoryHouseholdMember(G2PRegisterHistory, G2PPersonHistory, G2PGeoHistory):

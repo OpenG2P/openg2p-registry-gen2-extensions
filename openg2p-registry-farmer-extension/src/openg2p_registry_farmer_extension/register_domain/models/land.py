@@ -25,6 +25,13 @@ class G2PRegisterLand(G2PRegister, G2PGeo, G2PGeoShape):
             self.measurement or "",
         ]
 
+    def get_record_name_fields(self) -> list[str]:
+        """Return land fields used to build record_name."""
+        return [
+            "Land",
+            self.functional_record_id or "",
+        ]
+
 
 # All Register History classes should have the prefix G2PRegisterHistory
 class G2PRegisterHistoryLand(G2PRegisterHistory, G2PGeoHistory, G2PGeoShapeHistory):
