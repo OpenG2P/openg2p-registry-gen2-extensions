@@ -41,6 +41,12 @@ class G2PRegisterFamily(G2PRegister):
             str(self.under_other_vulnerable_status) if self.under_other_vulnerable_status is not None else "",
         ]
 
+    def get_record_name_fields(self) -> list[str]:
+        """Return family fields used to build record_name."""
+        return [
+            self.family_name or "",
+        ]
+
 # All Register History classes should have the prefix G2PRegisterHistory
 class G2PRegisterHistoryFamily(G2PRegisterHistory):
     __tablename__ = "g2p_register_history_families"

@@ -21,6 +21,13 @@ class G2PRegisterFarmer(G2PRegister, G2PPerson, G2PGeo):
             str(self.is_disabled) if self.is_disabled is not None else "",
         ]
 
+    def get_record_name_fields(self) -> list[str]:
+        """Return farmer fields used to build record_name."""
+        return [
+            self.first_name or "",
+            self.last_name or ""
+        ]
+
 
 # All Register History classes should have the prefix G2PRegisterHistory
 class G2PRegisterHistoryFarmer(G2PRegisterHistory, G2PPersonHistory, G2PGeoHistory):

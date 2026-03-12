@@ -23,6 +23,14 @@ class G2PRegisterMachinery(G2PRegister):
             self.equipment_source or "",
         ]
 
+    def get_record_name_fields(self) -> list[str]:
+        """Return machinery fields used to build record_name."""
+        return [
+            str(self.count) if self.count is not None else "",
+            self.machinery_type or "",
+            self.functional_record_id or "",
+        ]
+
 
 # All Register History classes should have the prefix G2PRegisterHistory
 class G2PRegisterHistoryMachinery(G2PRegisterHistory):
@@ -32,4 +40,3 @@ class G2PRegisterHistoryMachinery(G2PRegisterHistory):
     machinery_type: Mapped[str] = mapped_column(String, nullable=True)
     count: Mapped[int] = mapped_column(Integer, nullable=True)
     equipment_source: Mapped[str] = mapped_column(String, nullable=True)
-
