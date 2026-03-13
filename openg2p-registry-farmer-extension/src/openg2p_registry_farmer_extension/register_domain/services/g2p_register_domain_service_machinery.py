@@ -11,11 +11,31 @@ class G2PRegisterDomainServiceMachinery(G2PRegisterDomainService):
         _logger.info("Validating farmer domain attributes")
         return
 
-    def construct_record_name(self, payload: dict) -> str:
+    def construct_search_text(self, payload: dict, extra: list[str] = None) -> str:
+        _logger.info("Constructing search text for machinery")
+
+        keys = [
+            "functional_record_id", "record_name", "machinery_type", "count",
+            "equipment_source"
+        ]
+        search_text = []
+        if extra:
+            search_text.extend(extra)
+        search_text.extend(str(payload.get(key) or "").strip() for key in keys)
+
+        return " ".join(search_text).strip()
+
+    def construct_record_name(self, payload: dict, extra: list[str] = None) -> str:
         _logger.info("Constructing record name for machinery")
 
-        count = payload.get("count")
-        machinery_type = (payload.get("machinery_type") or "").strip()
-        functional_record_id = (payload.get("functional_record_id") or "").strip()
-        count_text = str(count).strip() if count is not None else ""
-        return " ".join(filter(None, [count_text, machinery_type, functional_record_id])).strip()
+        keys = [
+            "count",
+            "machinery_type",
+            "functional_record_id"
+        ]
+        record_name = []
+        if extra:
+            record_name.extend(extra)
+        record_name.extend((payload.get(key) or "").strip() for key in keys)
+
+        return " ".join(record_name).strip()

@@ -12,16 +12,9 @@ class G2PRegisterLivestock(G2PRegister):
     count: Mapped[int] = mapped_column(Integer, nullable=True)
     livestock_system: Mapped[str] = mapped_column(String, nullable=True)
 
-    def get_search_text_fields(self) -> list[str]:
-        """
-        Return livestock-specific fields for search text aggregation.
-        G2PRegister fields are automatically included via event listeners.
-        """
-        return [
-            self.livestock_type or "",
-            str(self.count) if self.count is not None else "",
-            self.livestock_system or "",
-        ]
+    def get_search_text_fields(self) -> str:
+        """Return livestock fields used to build search_text."""
+        return G2PRegisterDomainServiceLivestock().construct_search_text(self.to_dict())
 
     def get_record_name_fields(self) -> str:
         """Return livestock record_name from domain service implementation."""

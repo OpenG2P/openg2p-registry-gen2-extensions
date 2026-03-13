@@ -11,12 +11,32 @@ class G2PRegisterDomainServiceHousehold(G2PRegisterDomainService):
         _logger.info("Validating farmer domain attributes")
         return
 
-    def construct_record_name(self, payload: dict) -> str:
+    def construct_search_text(self, payload: dict, extra: list[str] = None) -> str:
+        _logger.info("Constructing search text for household")
+
+        keys = [
+            "functional_record_id", "record_name", "poverty_score",
+            "poverty_score_type", "household_head", "latitude", "longitude",
+            "altitude", "plus_code", "address_line_1", "address_line_2",
+            "postal_code", "country_code"
+        ]
+        search_text = []
+        if extra:
+            search_text.extend(extra)
+        search_text.extend(str(payload.get(key) or "").strip() for key in keys)
+
+        return " ".join(search_text).strip()
+
+    def construct_record_name(self, payload: dict, extra: list[str] = None) -> str:
         _logger.info("Constructing record name for household")
 
-        head_or_id = (
-            (payload.get("household_head") or "").strip()
-            or (payload.get("functional_record_id") or "").strip()
-        )
+        keys = [
+            "household_head",
+            "functional_record_id"
+        ]
+        record_name = []
+        if extra:
+            record_name.extend(extra)
+        record_name.extend((payload.get(key) or "").strip() for key in keys)
 
-        return f"{head_or_id} Household".strip()
+        return " ".join(record_name).strip()

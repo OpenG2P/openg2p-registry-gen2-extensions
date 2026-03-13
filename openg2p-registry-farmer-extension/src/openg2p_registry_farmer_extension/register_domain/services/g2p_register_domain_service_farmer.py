@@ -11,15 +11,35 @@ class G2PRegisterDomainServiceFarmer(G2PRegisterDomainService):
         _logger.info("Validating farmer domain attributes")
         return
 
+    def construct_search_text(self, payload: dict, extra: list[str] = None) -> str:
+        _logger.info("Constructing search text for farmer")
 
-    def construct_record_name(self, payload: dict) -> str:
+        keys = [
+            "functional_record_id", "first_name", "last_name", "foundational_id",
+            "middle_name", "given_name", "gender", "birth_date", "marital_status",
+            "occupation", "education_level", "latitude", "longitude", "altitude",
+            "plus_code", "address_line_1", "address_line_2", "postal_code",
+            "country_code"
+        ]
+        search_text = []
+        if extra:
+            search_text.extend(extra)
+        search_text.extend((payload.get(key) or "").strip() for key in keys)
+
+        return (" ".join(search_text)).strip()
+
+
+    def construct_record_name(self, payload: dict, extra: list[str] = None) -> str:
         _logger.info("Constructing record name for farmer")
 
-        first_name = (payload.get("first_name") or "").strip()
-        last_name = (payload.get("last_name") or "").strip()
-        record_name = (payload.get("record_name") or "").strip()
-        if first_name and last_name:
-            record_name = f"{first_name} {last_name}"
+        keys = [
+            "first_name",
+            "last_name",
+            "functional_record_id"
+        ]
+        record_name = []
+        if extra:
+            record_name.extend(extra)
+        record_name.extend((payload.get(key) or "").strip() for key in keys)
 
-        _logger.debug(f"Constructed record name for farmer: {record_name}")
-        return record_name
+        return " ".join(record_name).strip()

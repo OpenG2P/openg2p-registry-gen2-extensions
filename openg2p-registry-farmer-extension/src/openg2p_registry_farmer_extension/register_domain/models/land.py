@@ -15,16 +15,9 @@ class G2PRegisterLand(G2PRegister, G2PGeo, G2PGeoShape):
     land_size: Mapped[str] = mapped_column(String, nullable=True)
     measurement: Mapped[str] = mapped_column(String, nullable=True)
 
-    def get_search_text_fields(self) -> list[str]:
-        """
-        Return land-specific fields for search text aggregation.
-        G2PRegister, G2PGeo, and G2PGeoShape fields are automatically included via event listeners.
-        """
-        return [
-            self.land_tenure or "",
-            str(self.land_size) if self.land_size is not None else "",
-            self.measurement or "",
-        ]
+    def get_search_text_fields(self) -> str:
+        """Return land fields used to build search_text."""
+        return G2PRegisterDomainServiceLand().construct_search_text(self.to_dict())
 
     def get_record_name_fields(self) -> str:
         """Return land record_name from domain service implementation."""

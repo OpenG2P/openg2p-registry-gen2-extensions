@@ -12,16 +12,9 @@ class G2PRegisterHousehold(G2PRegister, G2PGeo):
     poverty_score_type: Mapped[str] = mapped_column(String, nullable=True)
     household_head: Mapped[str] = mapped_column(String, nullable=True)
 
-    def get_search_text_fields(self) -> list[str]:
-        """
-        Return household-specific fields for search text aggregation.
-        G2PRegister and G2PGeo fields are automatically included via event listeners.
-        """
-        return [
-            str(self.poverty_score) if self.poverty_score is not None else "",
-            self.poverty_score_type or "",
-            self.household_head or "",
-        ]
+    def get_search_text_fields(self) -> str:
+        """Return household fields used to build search_text."""
+        return G2PRegisterDomainServiceHousehold().construct_search_text(self.to_dict())
 
     def get_record_name_fields(self) -> str:
         """Return household record_name from domain service implementation."""

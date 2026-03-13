@@ -13,14 +13,9 @@ class G2PRegisterHouseholdMember(G2PRegister, G2PPerson, G2PGeo):
 
     is_disabled: Mapped[bool] = mapped_column(Boolean, nullable=True)
 
-    def get_search_text_fields(self) -> list[str]:
-        """
-        Return household member-specific fields for search text aggregation.
-        G2PRegister, G2PPerson, and G2PGeo fields are automatically included via event listeners.
-        """
-        return [
-            str(self.is_disabled) if self.is_disabled is not None else "",
-        ]
+    def get_search_text_fields(self) -> str:
+        """Return household member fields used to build search_text."""
+        return G2PRegisterDomainServiceHouseholdMember().construct_search_text(self.to_dict())
 
     def get_record_name_fields(self) -> str:
         """Return household member record_name from domain service implementation."""
