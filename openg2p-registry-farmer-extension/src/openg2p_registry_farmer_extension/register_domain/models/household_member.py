@@ -4,6 +4,7 @@ from openg2p_registry_core.models import (
     G2PRegister, G2PRegisterHistory, G2PPerson, G2PGeo,
     G2PPersonHistory, G2PGeoHistory
 )
+from ..services import G2PRegisterDomainServiceHouseholdMember
 
 
 # All Register classes should have the prefix G2PRegister
@@ -21,13 +22,9 @@ class G2PRegisterHouseholdMember(G2PRegister, G2PPerson, G2PGeo):
             str(self.is_disabled) if self.is_disabled is not None else "",
         ]
 
-    def get_record_name_fields(self) -> list[str]:
-        """Return household member fields used to build record_name."""
-        return [
-            self.first_name or "",
-            self.last_name or "",
-        ]
-
+    def get_record_name_fields(self) -> str:
+        """Return household member record_name from domain service implementation."""
+        return G2PRegisterDomainServiceHouseholdMember().construct_record_name(self.to_dict())
 
 # All Register History classes should have the prefix G2PRegisterHistory
 class G2PRegisterHistoryHouseholdMember(G2PRegisterHistory, G2PPersonHistory, G2PGeoHistory):
