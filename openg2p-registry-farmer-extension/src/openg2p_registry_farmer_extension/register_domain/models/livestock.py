@@ -1,7 +1,7 @@
-from sqlalchemy import String, Float, Integer
+from sqlalchemy import String, Integer
 from sqlalchemy.orm import Mapped, mapped_column
 from openg2p_registry_core.models import G2PRegister, G2PRegisterHistory
-from openg2p_fastapi_common.models import BaseORMModel
+from ..services import G2PRegisterDomainServiceLivestock
 
 
 # All Register classes should have the prefix G2PRegister
@@ -23,14 +23,9 @@ class G2PRegisterLivestock(G2PRegister):
             self.livestock_system or "",
         ]
 
-    def get_record_name_fields(self) -> list[str]:
-        """Return livestock fields used to build record_name."""
-        return [
-            str(self.count) if self.count is not None else "",
-            self.livestock_type or "",
-            self.functional_record_id or "",
-        ]
-
+    def get_record_name_fields(self) -> str:
+        """Return livestock record_name from domain service implementation."""
+        return G2PRegisterDomainServiceLivestock().construct_record_name(self.to_dict())
 
 # All Register History classes should have the prefix G2PRegisterHistory
 class G2PRegisterHistoryLivestock(G2PRegisterHistory):

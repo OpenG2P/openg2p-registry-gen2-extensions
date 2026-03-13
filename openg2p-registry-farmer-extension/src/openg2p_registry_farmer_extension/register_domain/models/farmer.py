@@ -4,6 +4,7 @@ from openg2p_registry_core.models import (
     G2PRegister, G2PRegisterHistory, G2PGeo, G2PPerson,
     G2PPersonHistory, G2PGeoHistory
 )
+from ..services import G2PRegisterDomainServiceFarmer
 
 
 # All Register classes should have the prefix G2PRegister
@@ -21,12 +22,9 @@ class G2PRegisterFarmer(G2PRegister, G2PPerson, G2PGeo):
             str(self.is_disabled) if self.is_disabled is not None else "",
         ]
 
-    def get_record_name_fields(self) -> list[str]:
+    def get_record_name_fields(self) -> str:
         """Return farmer fields used to build record_name."""
-        return [
-            self.first_name or "",
-            self.last_name or ""
-        ]
+        return G2PRegisterDomainServiceFarmer().construct_record_name(self.to_dict())
 
 
 # All Register History classes should have the prefix G2PRegisterHistory

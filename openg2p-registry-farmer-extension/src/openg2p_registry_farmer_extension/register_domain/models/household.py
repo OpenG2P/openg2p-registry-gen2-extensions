@@ -1,6 +1,7 @@
-from sqlalchemy import String, Float
+from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column
 from openg2p_registry_core.models import G2PRegister, G2PRegisterHistory, G2PGeo, G2PGeoHistory
+from ..services import G2PRegisterDomainServiceHousehold
 
 
 # All Register classes should have the prefix G2PRegister
@@ -22,13 +23,9 @@ class G2PRegisterHousehold(G2PRegister, G2PGeo):
             self.household_head or "",
         ]
 
-    def get_record_name_fields(self) -> list[str]:
-        """Return household fields used to build record_name."""
-        return [
-            self.household_head or self.functional_record_id or "",
-            "Household",
-        ]
-
+    def get_record_name_fields(self) -> str:
+        """Return household record_name from domain service implementation."""
+        return G2PRegisterDomainServiceHousehold().construct_record_name(self.to_dict())
 
 # All Register History classes should have the prefix G2PRegisterHistory
 class G2PRegisterHistoryHousehold(G2PRegisterHistory, G2PGeoHistory):
