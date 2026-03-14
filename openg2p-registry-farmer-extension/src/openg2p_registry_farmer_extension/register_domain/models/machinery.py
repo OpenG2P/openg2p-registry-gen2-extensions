@@ -12,16 +12,9 @@ class G2PRegisterMachinery(G2PRegister):
     count: Mapped[int] = mapped_column(Integer, nullable=True)
     equipment_source: Mapped[str] = mapped_column(String, nullable=True)
 
-    def get_search_text_fields(self) -> list[str]:
-        """
-        Return machinery-specific fields for search text aggregation.
-        G2PRegister fields are automatically included via event listeners.
-        """
-        return [
-            self.machinery_type or "",
-            str(self.count) if self.count is not None else "",
-            self.equipment_source or "",
-        ]
+    def get_search_text_fields(self) -> str:
+        """Return machinery fields used to build search_text."""
+        return G2PRegisterDomainServiceMachinery().construct_search_text(self.to_dict())
 
     def get_record_name_fields(self) -> str:
         """Return machinery record_name from domain service implementation."""

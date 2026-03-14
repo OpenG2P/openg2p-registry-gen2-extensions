@@ -13,18 +13,13 @@ class G2PRegisterFarmer(G2PRegister, G2PPerson, G2PGeo):
 
     is_disabled: Mapped[bool] = mapped_column(Boolean, nullable=True)
 
-    def get_search_text_fields(self) -> list[str]:
-        """
-        Return farmer-specific fields for search text aggregation.
-        G2PRegister, G2PPerson, and G2PGeo fields are automatically included via event listeners.
-        """
-        return [
-            str(self.is_disabled) if self.is_disabled is not None else "",
-        ]
-
     def get_record_name_fields(self) -> str:
         """Return farmer fields used to build record_name."""
         return G2PRegisterDomainServiceFarmer().construct_record_name(self.to_dict())
+
+    def get_search_text_fields(self) -> str:
+        """Return farmer fields used to build search_text."""
+        return G2PRegisterDomainServiceFarmer().construct_search_text(self.to_dict())
 
 
 # All Register History classes should have the prefix G2PRegisterHistory
