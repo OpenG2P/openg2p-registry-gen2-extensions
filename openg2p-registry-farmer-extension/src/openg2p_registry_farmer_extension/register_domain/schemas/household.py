@@ -11,10 +11,12 @@ class G2PRegisterSchemaHousehold(G2PRegisterBaseSchema, G2PGeoSchema):
     Schema for Household register.
     Inherits fields from G2PRegisterBaseSchema and G2PGeoSchema.
     """
-    # Household-specific fields only
-    poverty_score: Optional[str] = None
-    poverty_score_type: Optional[str] = None
     household_head: Optional[str] = None
+    group_size: Optional[int] = None
+    num_children: Optional[int] = None
+    num_female_members: Optional[int] = None
+    num_male_members: Optional[int] = None
+    other_land_owner: Optional[bool] = None
 
 
 class G2PRegisterHistorySchemaHousehold(G2PRegisterHistorySchema, G2PGeoHistorySchema):
@@ -22,8 +24,9 @@ class G2PRegisterHistorySchemaHousehold(G2PRegisterHistorySchema, G2PGeoHistoryS
     Schema for Household history.
     Inherits fields from G2PRegisterHistorySchema and G2PGeoHistorySchema.
     """
-    # Household-specific fields only
-    poverty_score: Optional[str] = None
-    poverty_score_type: Optional[str] = None
     household_head: Optional[str] = None
-
+    group_size: Optional[int] = None
+    num_children: Optional[int] = None
+    num_female_members: Optional[int] = None
+    num_male_members: Optional[int] = None
+    other_land_owner: Optional[bool] = None

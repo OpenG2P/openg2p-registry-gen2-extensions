@@ -10,7 +10,7 @@ class G2PRegisterDomainServiceLand(G2PRegisterDomainService):
     async def validate_domain_attributes(
         self, change_request_request_payload: ChangeRequestRequestPayload
     ):
-        _logger.info("Validating farmer domain attributes")
+        _logger.info("Validating land domain attributes")
         return
 
     def construct_search_text(self, payload: dict, extra: list[str] = None) -> str:
@@ -19,9 +19,12 @@ class G2PRegisterDomainServiceLand(G2PRegisterDomainService):
         keys = [
             "functional_record_id",
             "record_name",
-            "land_tenure",
+            "land_ownership_type",
             "land_size",
-            "measurement",
+            "land_size_unit",
+            "current_land_use",
+            "farming_type",
+            "means_of_acquisition",
             "latitude",
             "longitude",
             "altitude",

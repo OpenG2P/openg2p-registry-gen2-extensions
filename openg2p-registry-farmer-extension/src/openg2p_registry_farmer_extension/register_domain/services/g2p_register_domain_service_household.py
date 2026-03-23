@@ -10,7 +10,7 @@ class G2PRegisterDomainServiceHousehold(G2PRegisterDomainService):
     async def validate_domain_attributes(
         self, change_request_request_payload: ChangeRequestRequestPayload
     ):
-        _logger.info("Validating farmer domain attributes")
+        _logger.info("Validating household domain attributes")
         return
 
     def construct_search_text(self, payload: dict, extra: list[str] = None) -> str:
@@ -19,8 +19,6 @@ class G2PRegisterDomainServiceHousehold(G2PRegisterDomainService):
         keys = [
             "functional_record_id",
             "record_name",
-            "poverty_score",
-            "poverty_score_type",
             "household_head",
             "latitude",
             "longitude",

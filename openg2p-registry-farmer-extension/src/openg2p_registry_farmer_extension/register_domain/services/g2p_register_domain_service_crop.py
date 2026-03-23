@@ -10,7 +10,7 @@ class G2PRegisterDomainServiceCrop(G2PRegisterDomainService):
     async def validate_domain_attributes(
         self, change_request_request_payload: ChangeRequestRequestPayload
     ):
-        _logger.info("Validating farmer domain attributes")
+        _logger.info("Validating crop domain attributes")
         return
 
     def construct_search_text(self, payload: dict, extra: list[str] = None) -> str:
@@ -19,14 +19,9 @@ class G2PRegisterDomainServiceCrop(G2PRegisterDomainService):
         keys = [
             "functional_record_id",
             "record_name",
-            "activity_group",
-            "crop_type",
-            "variety",
+            "commodity",
             "season",
             "end_use",
-            "irrigation",
-            "irrigation_water",
-            "fertilizer_type",
         ]
         search_text = []
         if extra:
@@ -42,7 +37,7 @@ class G2PRegisterDomainServiceCrop(G2PRegisterDomainService):
     def construct_record_name(self, payload: dict, extra: list[str] = None) -> str:
         _logger.info("Constructing record name for crop")
 
-        keys = ["crop_type", "functional_record_id"]
+        keys = ["commodity", "functional_record_id"]
         record_name = []
         if extra:
             record_name.extend(extra)

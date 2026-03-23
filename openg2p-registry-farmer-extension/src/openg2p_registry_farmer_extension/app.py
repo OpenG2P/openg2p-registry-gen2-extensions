@@ -13,10 +13,12 @@ from .register_domain.models import (
     G2PRegisterFarmer, G2PRegisterHistoryFarmer,
     G2PRegisterHousehold, G2PRegisterHistoryHousehold,
     G2PRegisterHouseholdMember, G2PRegisterHistoryHouseholdMember,
+    G2PRegisterPovertyScore, G2PRegisterHistoryPovertyScore,
     G2PRegisterCrop, G2PRegisterHistoryCrop,
     G2PRegisterLand, G2PRegisterHistoryLand,
+    G2PRegisterFarmInputs, G2PRegisterHistoryFarmInputs,
     G2PRegisterLivestock, G2PRegisterHistoryLivestock,
-    G2PRegisterMachinery, G2PRegisterHistoryMachinery,
+    G2PRegisterMembershipDetails, G2PRegisterHistoryMembershipDetails,
 )
 from .register_domain.factory import G2PRegisterDomainFactory
 from .register_domain.services import G2PRegisterDomainServiceFarmer
@@ -36,8 +38,6 @@ class Initializer(BaseInitializer):
 
         async def migrate():
             _logger.info("Migrating extensions database")
-            await G2PRegisterFarmer.create_migrate()
-            await G2PRegisterHistoryFarmer.create_migrate()
 
             await G2PRegisterHousehold.create_migrate()
             await G2PRegisterHistoryHousehold.create_migrate()
@@ -45,16 +45,25 @@ class Initializer(BaseInitializer):
             await G2PRegisterHouseholdMember.create_migrate()
             await G2PRegisterHistoryHouseholdMember.create_migrate()
 
-            await G2PRegisterCrop.create_migrate()
-            await G2PRegisterHistoryCrop.create_migrate()
+            await G2PRegisterPovertyScore.create_migrate()
+            await G2PRegisterHistoryPovertyScore.create_migrate()
+
+            await G2PRegisterFarmer.create_migrate()
+            await G2PRegisterHistoryFarmer.create_migrate()
+
+            await G2PRegisterMembershipDetails.create_migrate()
+            await G2PRegisterHistoryMembershipDetails.create_migrate()
 
             await G2PRegisterLand.create_migrate()
             await G2PRegisterHistoryLand.create_migrate()
 
+            await G2PRegisterFarmInputs.create_migrate()
+            await G2PRegisterHistoryFarmInputs.create_migrate()
+
+            await G2PRegisterCrop.create_migrate()
+            await G2PRegisterHistoryCrop.create_migrate()
+
             await G2PRegisterLivestock.create_migrate()
             await G2PRegisterHistoryLivestock.create_migrate()
-
-            await G2PRegisterMachinery.create_migrate()
-            await G2PRegisterHistoryMachinery.create_migrate()
 
         asyncio.run(migrate())

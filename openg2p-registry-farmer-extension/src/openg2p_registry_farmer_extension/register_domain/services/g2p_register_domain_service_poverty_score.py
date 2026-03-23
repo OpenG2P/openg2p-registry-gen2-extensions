@@ -6,23 +6,21 @@ from openg2p_registry_core.services import G2PRegisterDomainService
 _logger = logging.getLogger("g2p-register-domain-service")
 
 
-class G2PRegisterDomainServiceLivestock(G2PRegisterDomainService):
+class G2PRegisterDomainServicePovertyScore(G2PRegisterDomainService):
     async def validate_domain_attributes(
         self, change_request_request_payload: ChangeRequestRequestPayload
     ):
-        _logger.info("Validating livestock domain attributes")
+        _logger.info("Validating poverty score domain attributes")
         return
 
     def construct_search_text(self, payload: dict, extra: list[str] = None) -> str:
-        _logger.info("Constructing search text for livestock")
+        _logger.info("Constructing search text for poverty score")
 
         keys = [
             "functional_record_id",
             "record_name",
-            "livestock_type",
-            "breed",
-            "head_count",
-            "livestock_system",
+            "poverty_score",
+            "poverty_score_type",
         ]
         search_text = []
         if extra:
@@ -38,9 +36,9 @@ class G2PRegisterDomainServiceLivestock(G2PRegisterDomainService):
         return " ".join(search_text)
 
     def construct_record_name(self, payload: dict, extra: list[str] = None) -> str:
-        _logger.info("Constructing record name for livestock")
+        _logger.info("Constructing record name for poverty score")
 
-        keys = ["livestock_type", "breed", "functional_record_id"]
+        keys = ["poverty_score_type", "functional_record_id"]
         record_name = []
         if extra:
             record_name.extend(extra)
