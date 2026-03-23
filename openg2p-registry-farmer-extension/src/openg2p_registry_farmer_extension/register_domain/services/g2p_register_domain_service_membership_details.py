@@ -6,22 +6,22 @@ from openg2p_registry_core.services import G2PRegisterDomainService
 _logger = logging.getLogger("g2p-register-domain-service")
 
 
-class G2PRegisterDomainServiceMachinery(G2PRegisterDomainService):
+class G2PRegisterDomainServiceMembershipDetails(G2PRegisterDomainService):
     async def validate_domain_attributes(
         self, change_request_request_payload: ChangeRequestRequestPayload
     ):
-        _logger.info("Validating farmer domain attributes")
+        _logger.info("Validating membership details domain attributes")
         return
 
     def construct_search_text(self, payload: dict, extra: list[str] = None) -> str:
-        _logger.info("Constructing search text for machinery")
+        _logger.info("Constructing search text for membership details")
 
         keys = [
             "functional_record_id",
             "record_name",
-            "machinery_type",
-            "count",
-            "equipment_source",
+            "primary_cooperative_name",
+            "cooperative_union_name",
+            "farmer_cluster_role",
         ]
         search_text = []
         if extra:
@@ -34,12 +34,12 @@ class G2PRegisterDomainServiceMachinery(G2PRegisterDomainService):
             if str(payload.get(key) or "").strip()
         )
 
-        return " ".join(search_text)
+        return " ".join(search_text).strip()
 
     def construct_record_name(self, payload: dict, extra: list[str] = None) -> str:
-        _logger.info("Constructing record name for machinery")
+        _logger.info("Constructing record name for membership details")
 
-        keys = ["count", "machinery_type", "functional_record_id"]
+        keys = ["primary_cooperative_name", "functional_record_id"]
         record_name = []
         if extra:
             record_name.extend(extra)
