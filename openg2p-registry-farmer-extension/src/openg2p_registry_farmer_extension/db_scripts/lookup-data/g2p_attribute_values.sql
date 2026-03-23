@@ -5,12 +5,6 @@ INSERT INTO "public"."g2p_attribute_values" ("value_id", "attribute_id", "value_
 ('SOI_GOVT_NGO_SUPPORT', 'SOURCE_OF_INCOME', 'GOVT_NGO_SUPPORT', 'Government / NGO Support', NULL, 3),
 ('SOI_OTHERS', 'SOURCE_OF_INCOME', 'OTHERS', 'Others', NULL, 4),
 
--- Education Level
-('EDU_ILLITERATE', 'EDUCATION_LEVEL', 'ILLITERATE', 'Illiterate', NULL, 1),
-('EDU_CAN_READ_WRITE', 'EDUCATION_LEVEL', 'CAN_READ_WRITE', 'Can Read and Write', NULL, 2),
-('EDU_BASIC', 'EDUCATION_LEVEL', 'BASIC', 'Basic (1 - 8)', NULL, 3),
-('EDU_INTERMEDIARY', 'EDUCATION_LEVEL', 'INTERMEDIARY', 'Intermediary (9 - 12)', NULL, 4),
-('EDU_HIGHER', 'EDUCATION_LEVEL', 'HIGHER', 'Higher Education (University, Colleges)', NULL, 5),
 
 -- Crop Commodity
 ('CROP_WHEAT', 'CROP_COMMODITY', 'WHEAT', 'Wheat', NULL, 1),
