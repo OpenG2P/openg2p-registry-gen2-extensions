@@ -16,7 +16,7 @@ class G2PRegisterSchemaLand(G2PRegisterBaseSchema, G2PGeoSchema, G2PGeoShapeSche
     land_ownership_type: Optional[LandOwnershipTypeEnum] = None
     certificate_storage_id: Optional[str] = None
     land_size: Optional[str] = None
-    land_size_unit: Optional[LandSizeUnitEnum] = None
+    unit: Optional[LandSizeUnitEnum] = None
     soil_fertility: Optional[str] = None
     current_land_use: Optional[CurrentLandUseEnum] = None
     farming_type: Optional[FarmingTypeEnum] = None
@@ -32,7 +32,7 @@ class G2PRegisterHistorySchemaLand(G2PRegisterHistorySchema, G2PGeoHistorySchema
     land_ownership_type: Optional[LandOwnershipTypeEnum] = None
     certificate_storage_id: Optional[str] = None
     land_size: Optional[str] = None
-    land_size_unit: Optional[LandSizeUnitEnum] = None
+    unit: Optional[LandSizeUnitEnum] = None
     soil_fertility: Optional[str] = None
     current_land_use: Optional[CurrentLandUseEnum] = None
     farming_type: Optional[FarmingTypeEnum] = None

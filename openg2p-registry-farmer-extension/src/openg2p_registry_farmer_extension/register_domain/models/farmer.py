@@ -47,4 +47,5 @@ class G2PRegisterHistoryFarmer(G2PRegisterHistory, G2PPersonHistory, G2PGeoHisto
     source_of_income: Mapped[str] = mapped_column(String, nullable=True)
     source_of_income_other: Mapped[str] = mapped_column(String, nullable=True)
     language_spoken: Mapped[str] = mapped_column(String, nullable=True)
+    education_level: Mapped[str] = mapped_column(String, nullable=True)
     national_id_masked: Mapped[str] = mapped_column(String, nullable=True)
