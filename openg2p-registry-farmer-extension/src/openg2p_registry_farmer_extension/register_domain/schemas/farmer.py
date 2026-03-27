@@ -14,7 +14,7 @@ class G2PRegisterSchemaFarmer(G2PRegisterBaseSchema, G2PPersonSchema, G2PGeoSche
     """
     estimated_age: Optional[int] = None
     has_personal_phone: Optional[bool] = None
-    is_disabled: Optional[bool] = None
+    disabled: Optional[bool] = None
     disability_type: Optional[DisabilityTypeEnum] = None
     disability_severity: Optional[DisabilitySeverityEnum] = None
     source_of_income: Optional[SourceOfIncomeEnum] = None
@@ -30,7 +30,7 @@ class G2PRegisterHistorySchemaFarmer(G2PRegisterHistorySchema, G2PPersonHistoryS
     """
     estimated_age: Optional[int] = None
     has_personal_phone: Optional[bool] = None
-    is_disabled: Optional[bool] = None
+    disabled: Optional[bool] = None
     disability_type: Optional[DisabilityTypeEnum] = None
     disability_severity: Optional[DisabilitySeverityEnum] = None
     source_of_income: Optional[SourceOfIncomeEnum] = None

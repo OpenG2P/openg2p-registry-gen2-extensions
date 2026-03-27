@@ -43,22 +43,28 @@ class G2PRegisterDomainServiceFarmer(G2PRegisterDomainService):
         ]
         search_text = []
         if extra:
-            search_text.extend(extra)
+            search_text.extend(
+                str(value).strip() for value in extra if str(value).strip()
+            )
         search_text.extend(
-            value
-            for value in ((payload.get(key) or "").strip() for key in keys)
-            if value
+            str(payload.get(key) or "").strip()
+            for key in keys
+            if str(payload.get(key) or "").strip()
         )
 
-        return " ".join(search_text)
+        return " ".join(search_text).strip()
 
     def construct_record_name(self, payload: dict, extra: list[str] = None) -> str:
         _logger.info("Constructing record name for farmer")
 
-        keys = ["first_name", "last_name", "functional_record_id"]
+        keys = ["first_name", "last_name"]
         record_name = []
         if extra:
-            record_name.extend(extra)
-        record_name.extend((payload.get(key) or "").strip() for key in keys)
+            record_name.extend(str(item).strip() for item in extra if str(item).strip())
+        record_name.extend(
+            str(payload.get(key) or "").strip()
+            for key in keys
+            if str(payload.get(key) or "").strip()
+        )
 
         return " ".join(record_name).strip()
