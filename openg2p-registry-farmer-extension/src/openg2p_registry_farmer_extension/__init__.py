@@ -1,2 +1,2 @@
-__version__ = "1.0.0.develop"
+__version__ = "1.0.0"
 __variant__ = "farmer"
