@@ -4,7 +4,12 @@ from openg2p_registry_core.schemas import (
     G2PRegisterBaseSchema, G2PPersonSchema, G2PGeoSchema,
     G2PRegisterHistorySchema, G2PPersonHistorySchema, G2PGeoHistorySchema
 )
-from ..models.enums import DisabilityTypeEnum, DisabilitySeverityEnum, SourceOfIncomeEnum
+from ..models.enums import (
+    DisabilityTypeEnum,
+    DisabilitySeverityEnum,
+    EducationalLevelEnum,
+    SourceOfIncomeEnum,
+)
 
 
 class G2PRegisterSchemaFarmer(G2PRegisterBaseSchema, G2PPersonSchema, G2PGeoSchema):
@@ -14,12 +19,13 @@ class G2PRegisterSchemaFarmer(G2PRegisterBaseSchema, G2PPersonSchema, G2PGeoSche
     """
     estimated_age: Optional[int] = None
     has_personal_phone: Optional[bool] = None
-    is_disabled: Optional[bool] = None
+    disabled: Optional[bool] = None
     disability_type: Optional[DisabilityTypeEnum] = None
     disability_severity: Optional[DisabilitySeverityEnum] = None
     source_of_income: Optional[SourceOfIncomeEnum] = None
     source_of_income_other: Optional[str] = None
     language_spoken: Optional[str] = None
+    education_level: Optional[EducationalLevelEnum] = None
     national_id_masked: Optional[str] = None
 
 
@@ -30,10 +36,11 @@ class G2PRegisterHistorySchemaFarmer(G2PRegisterHistorySchema, G2PPersonHistoryS
     """
     estimated_age: Optional[int] = None
     has_personal_phone: Optional[bool] = None
-    is_disabled: Optional[bool] = None
+    disabled: Optional[bool] = None
     disability_type: Optional[DisabilityTypeEnum] = None
     disability_severity: Optional[DisabilitySeverityEnum] = None
     source_of_income: Optional[SourceOfIncomeEnum] = None
     source_of_income_other: Optional[str] = None
     language_spoken: Optional[str] = None
+    education_level: Optional[EducationalLevelEnum] = None
     national_id_masked: Optional[str] = None

@@ -41,10 +41,11 @@ class G2PRegisterHistoryFarmer(G2PRegisterHistory, G2PPersonHistory, G2PGeoHisto
 
     estimated_age: Mapped[int] = mapped_column(Integer, nullable=True)
     has_personal_phone: Mapped[bool] = mapped_column(Boolean, nullable=True)
-    is_disabled: Mapped[bool] = mapped_column(Boolean, nullable=True)
+    disabled: Mapped[bool] = mapped_column(Boolean, nullable=True)
     disability_type: Mapped[str] = mapped_column(String, nullable=True)
     disability_severity: Mapped[str] = mapped_column(String, nullable=True)
     source_of_income: Mapped[str] = mapped_column(String, nullable=True)
     source_of_income_other: Mapped[str] = mapped_column(String, nullable=True)
     language_spoken: Mapped[str] = mapped_column(String, nullable=True)
+    education_level: Mapped[str] = mapped_column(String, nullable=True)
     national_id_masked: Mapped[str] = mapped_column(String, nullable=True)
