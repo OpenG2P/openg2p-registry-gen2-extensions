@@ -17,8 +17,6 @@ class G2PRegisterDomainServiceHouseholdMember(G2PRegisterDomainService):
         _logger.info("Constructing search text for household member")
 
         keys = [
-            "functional_record_id",
-            "record_name",
             "first_name",
             "last_name",
             "foundational_id",
@@ -48,7 +46,7 @@ class G2PRegisterDomainServiceHouseholdMember(G2PRegisterDomainService):
             if str(payload.get(key) or "").strip()
         )
 
-        return " ".join(search_text)
+        return " ".join(search_text).strip()
 
     def construct_record_name(self, payload: dict, extra: list[str] = None) -> str:
         _logger.info("Constructing record name for household member")
@@ -56,7 +54,11 @@ class G2PRegisterDomainServiceHouseholdMember(G2PRegisterDomainService):
         keys = ["first_name", "last_name"]
         record_name = []
         if extra:
-            record_name.extend(extra)
-        record_name.extend((payload.get(key) or "").strip() for key in keys)
+            record_name.extend(str(item).strip() for item in extra if str(item).strip())
+        record_name.extend(
+            str(payload.get(key) or "").strip()
+            for key in keys
+            if str(payload.get(key) or "").strip()
+        )
 
         return " ".join(record_name).strip()

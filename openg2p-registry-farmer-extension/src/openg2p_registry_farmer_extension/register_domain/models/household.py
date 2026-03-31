@@ -31,8 +31,8 @@ class G2PRegisterHistoryHousehold(G2PRegisterHistory, G2PGeoHistory):
     __tablename__ = "g2p_register_history_households"
 
     household_head: Mapped[str] = mapped_column(String, nullable=True)
-    group_size: Mapped[int] = mapped_column(Integer, nullable=True)
-    num_children: Mapped[int] = mapped_column(Integer, nullable=True)
-    num_female_members: Mapped[int] = mapped_column(Integer, nullable=True)
-    num_male_members: Mapped[int] = mapped_column(Integer, nullable=True)
+    size_of_group: Mapped[int] = mapped_column(Integer, nullable=True)
+    number_of_children: Mapped[int] = mapped_column(Integer, nullable=True)
+    number_of_female_members: Mapped[int] = mapped_column(Integer, nullable=True)
+    number_of_male_members: Mapped[int] = mapped_column(Integer, nullable=True)
     other_land_owner: Mapped[bool] = mapped_column(Boolean, nullable=True)
