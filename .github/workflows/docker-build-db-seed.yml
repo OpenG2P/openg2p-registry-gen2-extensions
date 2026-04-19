@@ -7,9 +7,7 @@ on:
     tags-ignore:
       - '**'
     paths:
-      - 'openg2p-registry-*-extension/src/**/configurations/**'
-      - 'openg2p-registry-*-extension/src/**/sample_data/**'
-      - 'openg2p-registry-*-extension/src/**/db_scripts/**'
+      - 'openg2p-registry-*-extension/**'
       - 'Dockerfile.db-seed'
       - 'docker-entrypoint-db-seed.sh'
       - '.github/workflows/docker-build-db-seed.yml'
