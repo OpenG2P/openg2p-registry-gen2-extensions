@@ -2,7 +2,7 @@ INSERT INTO "public"."g2p_attribute_values" ("value_id","attribute_id","value_co
 -- Source of Income
 ('SOI_CROP_PRODUCTION','SOURCE_OF_INCOME','CROP_PRODUCTION','Crop Production',NULL,1),
 ('SOI_LIVESTOCK_PRODUCTION','SOURCE_OF_INCOME','LIVESTOCK_PRODUCTION','Livestock Production',NULL,2),
-('SOI_GOVT_NGO_SUPPORT','SOURCE_OF_INCOME','GOVT_NGO_SUPPORT','Government / NGO Support',NULL,3),
+('SOI_GOVERNMENT_NGO_SUPPORT','SOURCE_OF_INCOME','GOVERNMENT_NGO_SUPPORT','Government / NGO Support',NULL,3),
 ('SOI_OTHERS','SOURCE_OF_INCOME','OTHERS','Others',NULL,4),
 -- Crop Commodity
 ('CROP_WHEAT','CROP_COMMODITY','WHEAT','WHEAT',NULL,1),
