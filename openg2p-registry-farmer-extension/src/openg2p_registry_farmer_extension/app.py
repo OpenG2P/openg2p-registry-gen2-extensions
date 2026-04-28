@@ -19,6 +19,9 @@ from .register_domain.models import (
     G2PRegisterFarmInputs, G2PRegisterHistoryFarmInputs,
     G2PRegisterLivestock, G2PRegisterHistoryLivestock,
     G2PRegisterMembershipDetails, G2PRegisterHistoryMembershipDetails,
+    G2PIntakeFormHousehold, G2PIntakeFormFarmer, G2PIntakeFormHouseholdMember,
+    G2PIntakeFormPovertyScore, G2PIntakeFormCrop, G2PIntakeFormLand,
+    G2PIntakeFormFarmInputs, G2PIntakeFormLivestock, G2PIntakeFormMembershipDetails,
 )
 from .register_domain.factory import G2PRegisterDomainFactory
 from .register_domain.services import G2PRegisterDomainServiceFarmer, G2PRegisterDomainServiceHousehold
@@ -42,29 +45,38 @@ class Initializer(BaseInitializer):
 
             await G2PRegisterHousehold.create_migrate()
             await G2PRegisterHistoryHousehold.create_migrate()
+            await G2PIntakeFormHousehold.create_migrate()
 
             await G2PRegisterHouseholdMember.create_migrate()
             await G2PRegisterHistoryHouseholdMember.create_migrate()
+            await G2PIntakeFormHouseholdMember.create_migrate()
 
             await G2PRegisterPovertyScore.create_migrate()
             await G2PRegisterHistoryPovertyScore.create_migrate()
+            await G2PIntakeFormPovertyScore.create_migrate()
 
             await G2PRegisterFarmer.create_migrate()
             await G2PRegisterHistoryFarmer.create_migrate()
+            await G2PIntakeFormFarmer.create_migrate()
 
             await G2PRegisterMembershipDetails.create_migrate()
             await G2PRegisterHistoryMembershipDetails.create_migrate()
+            await G2PIntakeFormMembershipDetails.create_migrate()
 
             await G2PRegisterLand.create_migrate()
             await G2PRegisterHistoryLand.create_migrate()
+            await G2PIntakeFormLand.create_migrate()
 
             await G2PRegisterFarmInputs.create_migrate()
             await G2PRegisterHistoryFarmInputs.create_migrate()
+            await G2PIntakeFormFarmInputs.create_migrate()
 
             await G2PRegisterCrop.create_migrate()
             await G2PRegisterHistoryCrop.create_migrate()
+            await G2PIntakeFormCrop.create_migrate()
 
             await G2PRegisterLivestock.create_migrate()
             await G2PRegisterHistoryLivestock.create_migrate()
+            await G2PIntakeFormLivestock.create_migrate()
 
         asyncio.run(migrate())
