@@ -1,5 +1,5 @@
 from openg2p_registry_core.models.g2p_intake_form import G2PIntakeForm
-from sqlalchemy import Integer, String
+from sqlalchemy import Integer, String, select
 from sqlalchemy.orm import Mapped, mapped_column, Session
 
 from openg2p_registry_core.models import G2PRegister, G2PRegisterHistory
@@ -46,6 +46,9 @@ class G2PIntakeFormLivestock(G2PIntakeForm, G2PRegister, G2PLivestock):
         return G2PRegisterDomainServiceLivestock().construct_record_name(self.to_dict())
     
     async def get_link_internal_record_id(self, session: Session):
-        farmer = await session.get(G2PIntakeFormFarmer, self.submission_id)
+        result = await session.execute(
+            select(G2PIntakeFormFarmer).where(G2PIntakeFormFarmer.submission_id == self.submission_id)
+        )
+        farmer = result.scalars().first()
         if farmer:
             self.link_internal_record_id = farmer.internal_record_id
