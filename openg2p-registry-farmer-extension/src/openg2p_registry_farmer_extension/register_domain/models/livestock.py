@@ -1,7 +1,9 @@
 from openg2p_registry_core.models.g2p_intake_form import G2PIntakeForm
 from sqlalchemy import Integer, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, Session
+
 from openg2p_registry_core.models import G2PRegister, G2PRegisterHistory
+from .farmer import G2PIntakeFormFarmer
 from ..services import G2PRegisterDomainServiceLivestock
 from .enums import LivestockSystemEnum
 
@@ -42,3 +44,8 @@ class G2PIntakeFormLivestock(G2PIntakeForm, G2PRegister, G2PLivestock):
     def get_record_name_fields(self) -> str:
         """Return livestock record_name from domain service implementation."""
         return G2PRegisterDomainServiceLivestock().construct_record_name(self.to_dict())
+    
+    def get_link_internal_record_id(self, session: Session):
+        farmer = session.get(G2PIntakeFormFarmer, self.submission_id)
+        if farmer:
+            self.link_internal_record_id = farmer.internal_record_id
