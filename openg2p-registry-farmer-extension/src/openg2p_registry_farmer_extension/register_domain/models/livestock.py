@@ -45,7 +45,7 @@ class G2PIntakeFormLivestock(G2PIntakeForm, G2PRegister, G2PLivestock):
         """Return livestock record_name from domain service implementation."""
         return G2PRegisterDomainServiceLivestock().construct_record_name(self.to_dict())
     
-    def get_link_internal_record_id(self, session: Session):
-        farmer = session.get(G2PIntakeFormFarmer, self.submission_id)
+    async def get_link_internal_record_id(self, session: Session):
+        farmer = await session.get(G2PIntakeFormFarmer, self.submission_id)
         if farmer:
             self.link_internal_record_id = farmer.internal_record_id
