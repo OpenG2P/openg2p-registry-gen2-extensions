@@ -3,7 +3,6 @@ from sqlalchemy import Integer, String, select
 from sqlalchemy.orm import Mapped, mapped_column, Session
 
 from openg2p_registry_core.models import G2PRegister, G2PRegisterHistory
-from .farmer import G2PIntakeFormFarmer
 from ..services import G2PRegisterDomainServiceLivestock
 from .enums import LivestockSystemEnum
 
@@ -46,9 +45,10 @@ class G2PIntakeFormLivestock(G2PIntakeForm, G2PRegister, G2PLivestock):
         return G2PRegisterDomainServiceLivestock().construct_record_name(self.to_dict())
     
     async def get_link_internal_record_id(self, session: Session):
+        from .land import G2PIntakeFormLand
         result = await session.execute(
-            select(G2PIntakeFormFarmer).where(G2PIntakeFormFarmer.submission_id == self.submission_id)
+            select(G2PIntakeFormLand).where(G2PIntakeFormLand.submission_id == self.submission_id)
         )
-        farmer = result.scalars().first()
-        if farmer:
-            self.link_internal_record_id = farmer.internal_record_id
+        land = result.scalars().first()
+        if land:
+            self.link_internal_record_id = land.internal_record_id
