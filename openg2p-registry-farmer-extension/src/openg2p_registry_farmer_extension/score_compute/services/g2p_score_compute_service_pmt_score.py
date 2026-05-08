@@ -19,7 +19,7 @@ class G2PScoreComputeServicePmtScore(G2PScoreComputeInterface):
 
     async def compute_score(
         self,
-        internal_record_id: str,
+        link_internal_record_id: str,
         contributing_attribute_values: dict,
         score_config: dict,
     ) -> float:
@@ -27,7 +27,7 @@ class G2PScoreComputeServicePmtScore(G2PScoreComputeInterface):
         Compute PMT score based on household characteristics.
         
         Args:
-            internal_record_id: UUID of the register record
+            link_internal_record_id: Linked record internal record ID
             contributing_attribute_values: Dictionary containing attribute values
                 that feed into this score computation
             score_config: Configuration dictionary containing weights and parameters
@@ -36,7 +36,7 @@ class G2PScoreComputeServicePmtScore(G2PScoreComputeInterface):
             float: Computed PMT score (typically 0-100, lower indicates more vulnerable)
         """
         _logger.info(
-            f"Computing PMT score for record {internal_record_id} "
+            f"Computing PMT score for record {link_internal_record_id} "
             f"with {len(contributing_attribute_values)} attributes"
         )
 
@@ -84,6 +84,6 @@ class G2PScoreComputeServicePmtScore(G2PScoreComputeInterface):
             marital_score = 0.2
         score += marital_score * weights.get("marital_status", 0.05)
 
-        _logger.info(f"Computed PMT score: {round(score, 4)} for record {internal_record_id}")
+        _logger.info(f"Computed PMT score: {round(score, 4)} for record {link_internal_record_id}")
         
         return round(score, 4)
